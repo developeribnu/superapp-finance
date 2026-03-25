@@ -1,0 +1,51 @@
+export const navigationItems = [
+  {
+    id: "personal-finance",
+    label: "Personal Finance",
+    href: "/personal-finance",
+    icon: "Wallet",
+    description: "Budgeting, savings, and financial planning",
+  },
+  {
+    id: "investment",
+    label: "Investment",
+    href: "/investment",
+    icon: "TrendingUp",
+    description: "Stock analysis and portfolio tracking",
+  },
+  {
+    id: "crypto",
+    label: "Crypto",
+    href: "/crypto",
+    icon: "Bitcoin",
+    description: "Cryptocurrency and DeFi tracking",
+  },
+  {
+    id: "investment-banking",
+    label: "Investment Banking",
+    href: "/investment-banking",
+    icon: "Building2",
+    description: "M&A, valuation, and DCF models",
+  },
+  {
+    id: "ekonomi",
+    label: "Ekonomi",
+    href: "/ekonomi",
+    icon: "BarChart3",
+    description: "Macro/micro economics and Indonesia data",
+  },
+  {
+    id: "smart-money",
+    label: "Smart Money",
+    href: "/smart-money",
+    icon: "Zap",
+    description: "Institutional flows and whale tracking",
+  },
+  {
+    id: "polymarket",
+    label: "Polymarket",
+    href: "/polymarket",
+    icon: "Target",
+    description: "Prediction markets and probability analysis",
+  },
+];
