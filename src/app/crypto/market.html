@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Market Intelligence | Cryptosphere Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/portal-v2.css">
+</head>
+<body>
+
+  <!-- Navbar with Dropdown -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand">
+        <div class="brand-icon">₿</div>
+        <span class="brand-text">Cryptosphere</span>
+      </a>
+      
+      <nav class="navbar-nav">
+        <a href="/" class="nav-link">Home</a>
+        
+        <div class="nav-item-dropdown">
+          <a href="/" class="nav-link active">Analytics ▾</a>
+          <div class="dropdown-menu">
+            <a href="/bitcoin-intelligence-hub.html" class="dropdown-item">
+              <div class="dropdown-item-icon">₿</div>
+              <div>
+                <div class="dropdown-item-text">Bitcoin Intelligence</div>
+              </div>
+            </a>
+            <a href="/institutional-research-center.html" class="dropdown-item">
+              <div class="dropdown-item-icon">🏛️</div>
+              <div>
+                <div class="dropdown-item-text">Institutional Research</div>
+              </div>
+            </a>
+            <a href="/macro-factors.html" class="dropdown-item">
+              <div class="dropdown-item-icon">🌍</div>
+              <div>
+                <div class="dropdown-item-text">Macro Factors</div>
+              </div>
+            </a>
+            <a href="/onchain-analytics.html" class="dropdown-item">
+              <div class="dropdown-item-icon">⛓️</div>
+              <div>
+                <div class="dropdown-item-text">On-Chain Analytics</div>
+              </div>
+            </a>
+            <a href="/derivatives-analytics.html" class="dropdown-item">
+              <div class="dropdown-item-icon">📊</div>
+              <div>
+                <div class="dropdown-item-text">Derivatives</div>
+              </div>
+            </a>
+            <a href="/market-manipulation-intelligence.html" class="dropdown-item">
+              <div class="dropdown-item-icon">🛡️</div>
+              <div>
+                <div class="dropdown-item-text">Security Intel</div>
+              </div>
+            </a>
+          </div>
+        </div>
+        
+        <a href="/" class="nav-link">Tools</a>
+        <a href="/" class="nav-link">Knowledge</a>
+        <a href="/" class="nav-link">Research</a>
+      </nav>
+      
+      <div class="navbar-actions">
+        <a href="/" class="nav-cta">Launch App</a>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()">×</button>
+    <nav class="mobile-nav-links">
+      <a href="/" class="mobile-nav-link">Home</a>
+      <a href="/bitcoin-intelligence-hub.html" class="mobile-nav-link">Bitcoin Intelligence</a>
+      <a href="/institutional-research-center.html" class="mobile-nav-link">Institutional Research</a>
+      <a href="/macro-factors.html" class="mobile-nav-link">Macro Factors</a>
+      <a href="/onchain-analytics.html" class="mobile-nav-link">On-Chain Analytics</a>
+      <a href="/derivatives-analytics.html" class="mobile-nav-link">Derivatives</a>
+      <a href="/market-manipulation-intelligence.html" class="mobile-nav-link">Security Intel</a>
+    </nav>
+  </div>
+
+  <main class="main">
+    <section class="hero" style="padding: 60px 0 40px;">
+      <div class="container">
+        <h1 style="font-size: 2.5rem;">Market Intelligence</h1>
+        <p>Professional market analysis and real-time intelligence.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="cards-grid">
+          <a href="/bitcoin-intelligence-hub.html" class="card card-featured">
+            <div class="card-icon">₿</div>
+            <h3 class="card-title">Bitcoin Intelligence Hub</h3>
+            <p class="card-desc">6-tab comprehensive analysis: Technical, On-Chain, Derivatives, Cycle & Macro.</p>
+          </a>
+          
+          <a href="/institutional-research-center.html" class="card">
+            <div class="card-icon">🏛️</div>
+            <h3 class="card-title">Institutional Research</h3>
+            <p class="card-desc">ETF flows, corporate treasury holdings, banking research, and CBDC tracker.</p>
+          </a>
+          
+          <a href="/macro-factors.html" class="card">
+            <div class="card-icon">🌍</div>
+            <h3 class="card-title">Macro Factors</h3>
+            <p class="card-desc">Fed policy, DXY correlation, inflation data, and recession models.</p>
+          </a>
+          
+          <a href="/onchain-analytics.html" class="card">
+            <div class="card-icon">⛓️</div>
+            <h3 class="card-title">On-Chain Analytics</h3>
+            <p class="card-desc">Exchange flows, NUPL, SOPR, holder behavior, and stablecoin metrics.</p>
+          </a>
+          
+          <a href="/derivatives-analytics.html" class="card">
+            <div class="card-icon">📊</div>
+            <h3 class="card-title">Derivatives</h3>
+            <p class="card-desc">Funding rates, open interest, liquidation heatmaps, and options flow.</p>
+          </a>
+          
+          <a href="/market-manipulation-intelligence.html" class="card">
+            <div class="card-icon">🛡️</div>
+            <h3 class="card-title">Security Intel</h3>
+            <p class="card-desc">Fraud detection, manipulation analysis, and market protection strategies.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" style="margin-top: 0; padding: 40px 0;">
+    <div class="container">
+      <div class="footer-bottom" style="border: none; margin: 0; padding: 0;">
+        <p class="footer-copy">© 2026 Ibnu Cryptosphere</p>
+        <a href="/" style="font-size: 0.9rem; color: var(--text-secondary);">← Back to Portal</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMobileMenu() {
+      document.getElementById('mobileMenu').classList.toggle('active');
+    }
+  </script>
+
+</body>
+</html>

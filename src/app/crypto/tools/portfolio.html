@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Tracker | Cryptosphere Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg-primary: #020617;
+      --bg-secondary: #0f172a;
+      --bg-card: #1e293b;
+      --bg-hover: #334155;
+      --border: #1e293b;
+      --border-light: #334155;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-gold: #f59e0b;
+      --accent-blue: #3b82f6;
+      --accent-green: #22c55e;
+      --accent-red: #ef4444;
+      --accent-purple: #8b5cf6;
+      --accent-cyan: #06b6d4;
+      --radius: 12px;
+      --radius-lg: 16px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --nav-height: 70px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding-top: var(--nav-height);
+    }
+    .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-height);
+      background: rgba(2, 6, 23, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+    }
+    .navbar-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+    .brand-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent-gold) 0%, #fbbf24 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #000;
+    }
+    .navbar-nav { display: flex; align-items: center; gap: 4px; }
+    .nav-link {
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--text-primary);
+      background: rgba(245, 158, 11, 0.1);
+    }
+    .nav-item-dropdown { position: relative; }
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 8px;
+      min-width: 260px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.2s ease;
+      z-index: 1001;
+    }
+    .nav-item-dropdown:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text-secondary);
+      transition: all 0.15s;
+    }
+    .dropdown-item:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+    .dropdown-item-icon {
+      width: 32px; height: 32px;
+      background: var(--bg-hover);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 40px 0;
+      background: linear-gradient(180deg, rgba(59, 130, 246, 0.08) 0%, transparent 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 40px;
+    }
+    .hero-left { flex: 1; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--accent-blue), #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Balance Card */
+    .balance-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      min-width: 320px;
+    }
+    .balance-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .balance-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 12px;
+    }
+    .balance-change {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(34, 197, 94, 0.1);
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--accent-green);
+    }
+
+    /* Dashboard Grid */
+    .dashboard {
+      padding: 30px 0;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 24px;
+    }
+
+    /* Card */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-title-icon {
+      width: 36px; height: 36px;
+      background: var(--bg-hover);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Assets Table */
+    .assets-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .assets-table th,
+    .assets-table td {
+      padding: 16px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .assets-table th {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .assets-table td { font-size: 0.95rem; }
+    .assets-table tr:hover { background: rgba(59, 130, 246, 0.03); }
+    
+    /* Asset Cell */
+    .asset-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .asset-icon {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+    .asset-info h4 {
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+    }
+    .asset-symbol {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    
+    /* Price & Change */
+    .price {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+    }
+    .change {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.9rem;
+    }
+    .change.positive { color: var(--accent-green); }
+    .change.negative { color: var(--accent-red); }
+
+    /* Allocation Bar */
+    .allocation-bar {
+      height: 6px;
+      background: var(--bg-hover);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .allocation-fill {
+      height: 100%;
+      border-radius: 3px;
+    }
+
+    /* Sidebar */
+    .sidebar { position: sticky; top: 90px; }
+
+    /* Chart Container */
+    .chart-container {
+      height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Quick Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .stat-box {
+      padding: 16px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .stat-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Add Asset Button */
+    .add-asset-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--bg-secondary);
+      border: 1px dashed var(--border-light);
+      border-radius: 10px;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .add-asset-btn:hover {
+      background: rgba(59, 130, 246, 0.1);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      margin-top: 40px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    .footer-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .footer-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 10px; }
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--text-primary); }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Mobile */
+    @media (max-width: 1024px) {
+      .hero-content { flex-direction: column; text-align: center; }
+      .balance-card { min-width: auto; width: 100%; }
+      .dashboard { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 1.75rem; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .assets-table { font-size: 0.8rem; }
+      .assets-table th, .assets-table td { padding: 12px 6px; }
+      .asset-icon { width: 32px; height: 32px; font-size: 1rem; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand">
+        <div class="brand-icon">₿</div>
+        <span class="brand-text">Cryptosphere</span>
+      </a>
+      <nav class="navbar-nav">
+        <a href="/" class="nav-link">Home</a>
+        <div class="nav-item-dropdown">
+          <a href="/" class="nav-link">Analytics ▾</a>
+          <div class="dropdown-menu">
+            <a href="/bitcoin-intelligence-hub.html" class="dropdown-item"><div class="dropdown-item-icon">₿</div><div><div class="dropdown-item-text">Bitcoin Intelligence</div></div></a>
+            <a href="/institutional-research-center.html" class="dropdown-item"><div class="dropdown-item-icon">🏛️</div><div><div class="dropdown-item-text">Institutional Research</div></div></a>
+            <a href="/macro-factors.html" class="dropdown-item"><div class="dropdown-item-icon">🌍</div><div><div class="dropdown-item-text">Macro Factors</div></div></a>
+            <a href="/onchain-analytics.html" class="dropdown-item"><div class="dropdown-item-icon">⛓️</div><div><div class="dropdown-item-text">On-Chain Analytics</div></div></a>
+            <a href="/derivatives-analytics.html" class="dropdown-item"><div class="dropdown-item-icon">📊</div><div><div class="dropdown-item-text">Derivatives</div></div></a>
+            <a href="/market-manipulation-intelligence.html" class="dropdown-item"><div class="dropdown-item-icon">🛡️</div><div><div class="dropdown-item-text">Security Intel</div></div></a>
+          </div>
+        </div>
+        <div class="nav-item-dropdown">
+          <a href="/portal/tools.html" class="nav-link active">Tools ▾</a>
+          <div class="dropdown-menu">
+            <a href="screener.html" class="dropdown-item"><div class="dropdown-item-icon">🎯</div><div><div class="dropdown-item-text">Screener</div></div></a>
+            <a href="ai-analyze.html" class="dropdown-item"><div class="dropdown-item-icon">🤖</div><div><div class="dropdown-item-text">AI Analyze</div></div></a>
+            <a href="whale-tracker.html" class="dropdown-item"><div class="dropdown-item-icon">🐋</div><div><div class="dropdown-item-text">Whale Tracker</div></div></a>
+            <a href="journal.html" class="dropdown-item"><div class="dropdown-item-icon">📓</div><div><div class="dropdown-item-text">Trading Journal</div></div></a>
+            <a href="position-calculator.html" class="dropdown-item"><div class="dropdown-item-icon">🧮</div><div><div class="dropdown-item-text">Calculator</div></div></a>
+            <a href="portfolio.html" class="dropdown-item"><div class="dropdown-item-icon">💼</div><div><div class="dropdown-item-text">Portfolio</div></div></a>
+          </div>
+        </div>
+        <a href="/" class="nav-link">Knowledge</a>
+        <a href="/" class="nav-link">Research</a>
+      </nav>
+      <div style="display: flex; gap: 12px;">
+        <a href="/" style="padding: 10px 18px; background: var(--accent-gold); color: #000; font-weight: 600; border-radius: 8px; text-decoration: none;">Launch App</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-left">
+          <div class="hero-badge">💼 PORTFOLIO TRACKING</div>
+          <h1>Portfolio Tracker</h1>
+          <p class="hero-desc">Track all your crypto assets in one place. Monitor P&L, allocation, and performance across multiple wallets and exchanges.</p>
+        </div>
+        <div class="balance-card">
+          <div class="balance-label">Total Portfolio Value</div>
+          <div class="balance-value" style="color: var(--accent-blue);">$142,847.50</div>
+          <div class="balance-change">
+            <span>▲</span>
+            <span>+$8,234.20 (6.12%)</span>
+          </div>
+          <div style="margin-top: 16px; font-size: 0.85rem; color: var(--text-muted);">
+            vs last 24 hours
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard -->
+  <div class="container">
+    <div class="dashboard">
+      
+      <!-- Main Content -->
+      <div class="main-content">
+        
+        <!-- Assets Table -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon">📊</div>
+              Your Assets
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button style="padding: 8px 16px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; color: var(--text-secondary); font-size: 0.85rem; cursor: pointer;">Sort by: Value ▾</button>
+            </div>
+          </div>
+          <table class="assets-table">
+            <thead>
+              <tr>
+                <th>Asset</th>
+                <th>Balance</th>
+                <th>Price</th>
+                <th>Value</th>
+                <th>24h</th>
+                <th>Allocation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="asset-cell">
+                    <div class="asset-icon" style="background: rgba(247, 147, 26, 0.15); color: #f7931a;">₿</div>
+                    <div class="asset-info">
+                      <h4>Bitcoin</h4>
+                      <div class="asset-symbol">BTC</div>
+                    </div>
+                  </div>
+                </td>
+                <td>1.245 BTC</td>
+                <td class="price">$87,234</td>
+                <td class="price">$108,606</td>
+                <td class="change positive">+2.18%</td>
+                <td>
+                  <div style="font-weight: 600;">76.0%</div>
+                  <div class="allocation-bar">
+                    <div class="allocation-fill" style="width: 76%; background: #f7931a;"></div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="asset-cell">
+                    <div class="asset-icon" style="background: rgba(98, 126, 234, 0.15); color: #627eea;">Ξ</div>
+                    <div class="asset-info">
+                      <h4>Ethereum</h4>
+                      <div class="asset-symbol">ETH</div>
+                    </div>
+                  </div>
+                </td>
+                <td>8.50 ETH</td>
+                <td class="price">$2,342</td>
+                <td class="price">$19,907</td>
+                <td class="change positive">+1.45%</td>
+                <td>
+                  <div style="font-weight: 600;">13.9%</div>
+                  <div class="allocation-bar">
+                    <div class="allocation-fill" style="width: 14%; background: #627eea;"></div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="asset-cell">
+                    <div class="asset-icon" style="background: rgba(20, 241, 149, 0.15); color: #14f195;">◎</div>
+                    <div class="asset-info">
+                      <h4>Solana</h4>
+                      <div class="asset-symbol">SOL</div>
+                    </div>
+                  </div>
+                </td>
+                <td>42.0 SOL</td>
+                <td class="price">$198.42</td>
+                <td class="price">$8,334</td>
+                <td class="change positive">+4.82%</td>
+                <td>
+                  <div style="font-weight: 600;">5.8%</div>
+                  <div class="allocation-bar">
+                    <div class="allocation-fill" style="width: 6%; background: #14f195;"></div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="asset-cell">
+                    <div class="asset-icon" style="background: rgba(55, 91, 210, 0.15); color: #375bd2;">⬡</div>
+                    <div class="asset-info">
+                      <h4>Chainlink</h4>
+                      <div class="asset-symbol">LINK</div>
+                    </div>
+                  </div>
+                </td>
+                <td>180 LINK</td>
+                <td class="price">$18.92</td>
+                <td class="price">$3,406</td>
+                <td class="change positive">+8.45%</td>
+                <td>
+                  <div style="font-weight: 600;">2.4%</div>
+                  <div class="allocation-bar">
+                    <div class="allocation-fill" style="width: 2%; background: #375bd2;"></div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="asset-cell">
+                    <div class="asset-icon" style="background: rgba(6, 182, 212, 0.15); color: #06b6d4;">∞</div>
+                    <div class="asset-info">
+                      <h4>Sui</h4>
+                      <div class="asset-symbol">SUI</div>
+                    </div>
+                  </div>
+                </td>
+                <td>650 SUI</td>
+                <td class="price">$3.45</td>
+                <td class="price">$2,243</td>
+                <td class="change positive">+12.56%</td>
+                <td>
+                  <div style="font-weight: 600;">1.6%</div>
+                  <div class="allocation-bar">
+                    <div class="allocation-fill" style="width: 2%; background: #06b6d4;"></div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="asset-cell">
+                    <div class="asset-icon" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">$</div>
+                    <div class="asset-info">
+                      <h4>USDT</h4>
+                      <div class="asset-symbol">Stablecoin</div>
+                    </div>
+                  </div>
+                </td>
+                <td>351.50 USDT</td>
+                <td class="price">$1.00</td>
+                <td class="price">$352</td>
+                <td class="change">0.00%</td>
+                <td>
+                  <div style="font-weight: 600;">0.2%</div>
+                  <div class="allocation-bar">
+                    <div class="allocation-fill" style="width: 0.5%; background: #f59e0b;"></div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="add-asset-btn" style="margin-top: 20px;">
+            <span>+</span>
+            <span>Add Asset</span>
+          </button>
+        </div>
+
+        <!-- Performance Chart -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon">📈</div>
+              Portfolio Performance
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button style="padding: 6px 12px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); font-size: 0.8rem; cursor: pointer;">1D</button>
+              <button style="padding: 6px 12px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); font-size: 0.8rem; cursor: pointer;">1W</button>
+              <button style="padding: 6px 12px; background: var(--accent-blue); border: none; border-radius: 6px; color: white; font-size: 0.8rem; cursor: pointer;">1M</button>
+              <button style="padding: 6px 12px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); font-size: 0.8rem; cursor: pointer;">1Y</button>
+              <button style="padding: 6px 12px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); font-size: 0.8rem; cursor: pointer;">ALL</button>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="portfolioChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        
+        <!-- Quick Stats -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon">📊</div>
+              Quick Stats
+            </div>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-label">Total Invested</div>
+              <div class="stat-value">$128.5K</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Total Return</div>
+              <div class="stat-value" style="color: var(--accent-green);">+$14.3K</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Best Performer</div>
+              <div class="stat-value" style="color: var(--accent-green);">SUI +45%</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Worst Performer</div>
+              <div class="stat-value" style="color: var(--accent-red);">LINK -5%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Allocation Chart -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon">🥧</div>
+              Allocation
+            </div>
+          </div>
+          <div class="chart-container" style="height: 220px;">
+            <canvas id="allocationChart"></canvas>
+          </div>
+          <div style="margin-top: 16px;">
+            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 12px; height: 12px; background: #f7931a; border-radius: 50%;"></div>
+                <span style="font-size: 0.9rem;">Bitcoin</span>
+              </div>
+              <span style="font-weight: 600;">76.0%</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 12px; height: 12px; background: #627eea; border-radius: 50%;"></div>
+                <span style="font-size: 0.9rem;">Ethereum</span>
+              </div>
+              <span style="font-weight: 600;">13.9%</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 12px; height: 12px; background: #14f195; border-radius: 50%;"></div>
+                <span style="font-size: 0.9rem;">Solana</span>
+              </div>
+              <span style="font-weight: 600;">5.8%</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 12px; height: 12px; background: var(--text-muted); border-radius: 50%;"></div>
+                <span style="font-size: 0.9rem;">Others</span>
+              </div>
+              <span style="font-weight: 600;">4.3%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Connection -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon">🔗</div>
+              Connected Wallets
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-secondary); border-radius: var(--radius);">
+              <div style="width: 40px; height: 40px; background: var(--accent-blue); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">🦊</div>
+              <div style="flex: 1;">
+                <div style="font-weight: 600;">MetaMask</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">0x71C...9A25</div>
+              </div>
+              <div style="width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%;"></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-secondary); border-radius: var(--radius);">
+              <div style="width: 40px; height: 40px; background: var(--accent-gold); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">B</div>
+              <div style="flex: 1;">
+                <div style="font-weight: 600;">Binance</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">API Connected</div>
+              </div>
+              <div style="width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%;"></div>
+            </div>
+          </div>
+          <button class="add-asset-btn" style="margin-top: 16px;">
+            <span>+</span>
+            <span>Connect Wallet</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="/" class="footer-logo">
+            <div class="brand-icon" style="width: 32px; height: 32px; font-size: 1rem;">₿</div>
+            <span>Cryptosphere</span>
+          </a>
+          <p class="footer-desc">Professional crypto intelligence platform. Built for serious market participants.</p>
+        </div>
+        <div>
+          <div class="footer-title">Analytics</div>
+          <ul class="footer-links">
+            <li><a href="/bitcoin-intelligence-hub.html">Bitcoin Hub</a></li>
+            <li><a href="/institutional-research-center.html">Institutional</a></li>
+            <li><a href="/macro-factors.html">Macro</a></li>
+            <li><a href="/onchain-analytics.html">On-Chain</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title">Tools</div>
+          <ul class="footer-links">
+            <li><a href="screener.html">Screener</a></li>
+            <li><a href="whale-tracker.html">Whale Tracker</a></li>
+            <li><a href="journal.html">Trading Journal</a></li>
+            <li><a href="portfolio.html">Portfolio</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title">Resources</div>
+          <ul class="footer-links">
+            <li><a href="https://www.heyibnu.com" target="_blank">heyibnu.com</a></li>
+            <li><a href="https://github.com/subkhanibnuaji/crypto" target="_blank">GitHub</a></li>
+            <li><a href="https://www.heyibnu.com/contact" target="_blank">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p style="font-size: 0.85rem; color: var(--text-muted);">© 2026 Ibnu Cryptosphere. All rights reserved.</p>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">Portfolio data is for reference only.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Portfolio Performance Chart
+    const portfolioCtx = document.getElementById('portfolioChart').getContext('2d');
+    new Chart(portfolioCtx, {
+      type: 'line',
+      data: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        datasets: [{
+          label: 'Portfolio Value',
+          data: [128500, 131200, 135800, 142847],
+          borderColor: '#3b82f6',
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
+          y: { 
+            ticks: { color: '#94a3b8', callback: (val) => '$' + (val/1000) + 'K' }, 
+            grid: { color: '#334155' } 
+          }
+        }
+      }
+    });
+
+    // Allocation Chart
+    const allocationCtx = document.getElementById('allocationChart').getContext('2d');
+    new Chart(allocationCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['BTC', 'ETH', 'SOL', 'LINK', 'SUI', 'Other'],
+        datasets: [{
+          data: [76, 13.9, 5.8, 2.4, 1.6, 0.3],
+          backgroundColor: ['#f7931a', '#627eea', '#14f195', '#375bd2', '#06b6d4', '#64748b'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+[
+  { "bank": "BCA", "type": "konvensional", "savingsRate": "0.5-1%", "depositoRate": "2.5-3%", "adminFee": "Rp 15.000/bln", "minBalance": "Rp 500.000", "lpsGuarantee": true },
+  { "bank": "BRI", "type": "konvensional", "savingsRate": "0.7-1.5%", "depositoRate": "2.5-3%", "adminFee": "Rp 12.000/bln", "minBalance": "Rp 100.000", "lpsGuarantee": true },
+  { "bank": "Mandiri", "type": "konvensional", "savingsRate": "0.5-1%", "depositoRate": "2.25-2.5%", "adminFee": "Rp 12.000/bln", "minBalance": "Rp 500.000", "lpsGuarantee": true },
+  { "bank": "BNI", "type": "konvensional", "savingsRate": "0.5-1%", "depositoRate": "2.25-2.75%", "adminFee": "Rp 11.000/bln", "minBalance": "Rp 250.000", "lpsGuarantee": true },
+  { "bank": "SeaBank", "type": "digital", "savingsRate": "5-6%", "depositoRate": "5-6%", "adminFee": "Gratis", "minBalance": "Rp 0", "lpsGuarantee": true },
+  { "bank": "Allo Bank", "type": "digital", "savingsRate": "3-4%", "depositoRate": "6-9%", "adminFee": "Gratis", "minBalance": "Rp 0", "lpsGuarantee": true },
+  { "bank": "Jago", "type": "digital", "savingsRate": "2-3.5%", "depositoRate": "3-5%", "adminFee": "Gratis", "minBalance": "Rp 0", "lpsGuarantee": true },
+  { "bank": "Blu (BCA Digital)", "type": "digital", "savingsRate": "3-4%", "depositoRate": "4-5%", "adminFee": "Gratis", "minBalance": "Rp 0", "lpsGuarantee": true },
+  { "bank": "BSI", "type": "syariah", "savingsRate": "Bagi hasil ~1-2%", "depositoRate": "Bagi hasil ~3-4%", "adminFee": "Rp 10.000/bln", "minBalance": "Rp 100.000", "lpsGuarantee": true }
+]

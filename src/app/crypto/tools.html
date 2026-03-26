@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trading Tools | Cryptosphere Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/portal-v2.css">
+  <style>
+    /* Dropdown Navigation Styles */
+    .nav-item { position: relative; }
+    .nav-dropdown-trigger {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.15s;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+    }
+    .nav-dropdown-trigger:hover,
+    .nav-dropdown-trigger.active {
+      color: var(--text-primary);
+      background: var(--bg-subtle);
+    }
+    .nav-dropdown-trigger::after {
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 4px solid currentColor;
+      transition: transform 0.2s;
+    }
+    .nav-item:hover .nav-dropdown-trigger::after {
+      transform: rotate(180deg);
+    }
+    .nav-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 220px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: all 0.2s ease;
+      z-index: 1001;
+      padding: 8px 0;
+      margin-top: 4px;
+    }
+    .nav-item:hover .nav-dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .nav-dropdown a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .nav-dropdown a:hover {
+      color: var(--text-primary);
+      background: var(--bg-subtle);
+    }
+    .nav-dropdown .dropdown-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+    .nav-dropdown .dropdown-label {
+      flex: 1;
+    }
+    /* No subnav - adjust main content */
+    .main { padding-top: var(--nav-height); }
+    /* Mobile dropdown support */
+    @media (max-width: 768px) {
+      .nav-dropdown { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Primary Navbar with Dropdown -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand">
+        <div class="brand-icon">₿</div>
+        <span class="brand-text">Cryptosphere</span>
+      </a>
+      
+      <nav class="navbar-nav">
+        <a href="/" class="nav-link">Home</a>
+        
+        <div class="nav-item">
+          <button class="nav-dropdown-trigger">Market</button>
+          <div class="nav-dropdown">
+            <a href="/market.html"><span class="dropdown-icon">📊</span><span class="dropdown-label">Market Overview</span></a>
+            <a href="/bitcoin-intelligence-hub.html"><span class="dropdown-icon">₿</span><span class="dropdown-label">Bitcoin Hub</span></a>
+            <a href="/onchain-analytics.html"><span class="dropdown-icon">⛓️</span><span class="dropdown-label">On-Chain Analytics</span></a>
+            <a href="/derivatives-analytics.html"><span class="dropdown-icon">📉</span><span class="dropdown-label">Derivatives</span></a>
+            <a href="/macro-factors.html"><span class="dropdown-icon">🌍</span><span class="dropdown-label">Macro Factors</span></a>
+          </div>
+        </div>
+        
+        <div class="nav-item">
+          <button class="nav-dropdown-trigger active">Tools</button>
+          <div class="nav-dropdown">
+            <a href="/tools.html"><span class="dropdown-icon">🎯</span><span class="dropdown-label">Sector Screener</span></a>
+            <a href="/"><span class="dropdown-icon">🤖</span><span class="dropdown-label">AI CekCoin</span></a>
+            <a href="/"><span class="dropdown-icon">🐋</span><span class="dropdown-label">Whale Tracker</span></a>
+            <a href="/"><span class="dropdown-icon">📓</span><span class="dropdown-label">Trading Journal</span></a>
+            <a href="/"><span class="dropdown-icon">🧮</span><span class="dropdown-label">Position Calculator</span></a>
+            <a href="/"><span class="dropdown-icon">⚖️</span><span class="dropdown-label">Coin Compare</span></a>
+          </div>
+        </div>
+        
+        <div class="nav-item">
+          <button class="nav-dropdown-trigger">Knowledge</button>
+          <div class="nav-dropdown">
+            <a href="/knowledge.html"><span class="dropdown-icon">📜</span><span class="dropdown-label">Strategy Deck</span></a>
+            <a href="/legacy.html#platform-intel"><span class="dropdown-icon">🌐</span><span class="dropdown-label">Platform Intel</span></a>
+            <a href="/legacy.html"><span class="dropdown-icon">📚</span><span class="dropdown-label">Legacy Archive</span></a>
+          </div>
+        </div>
+        
+        <div class="nav-item">
+          <button class="nav-dropdown-trigger">Research</button>
+          <div class="nav-dropdown">
+            <a href="/research.html"><span class="dropdown-icon">📰</span><span class="dropdown-label">Research Center</span></a>
+            <a href="/institutional-research-center.html"><span class="dropdown-icon">🏛️</span><span class="dropdown-label">Institutional</span></a>
+            <a href="/market-manipulation-intelligence.html"><span class="dropdown-icon">🛡️</span><span class="dropdown-label">Security Intel</span></a>
+          </div>
+        </div>
+      </nav>
+      
+      <div class="navbar-actions">
+        <a href="/" class="nav-cta">Super App</a>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()">×</button>
+    <nav class="mobile-nav-links">
+      <a href="/" class="mobile-nav-link">Home</a>
+      <a href="/market.html" class="mobile-nav-link">Market</a>
+      <a href="/tools.html" class="mobile-nav-link active">Tools</a>
+      <a href="/knowledge.html" class="mobile-nav-link">Knowledge</a>
+      <a href="/research.html" class="mobile-nav-link">Research</a>
+      <a href="/" class="mobile-nav-link" style="color: #f59e0b;">Super App →</a>
+    </nav>
+  </div>
+
+  <main class="main">
+    <section class="hero" style="padding: 60px 0 40px;">
+      <div class="container">
+        <h1 style="font-size: 2.5rem;">Trading Tools</h1>
+        <p>Execution utilities and analysis tools for traders.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Available Tools</h2>
+            <p class="section-desc">Access via Super App for full functionality</p>
+          </div>
+        </div>
+        
+        <div class="cards-grid">
+          <a href="/" class="card">
+            <div class="card-icon">🎯</div>
+            <h3 class="card-title">Sector Screener</h3>
+            <p class="card-desc">Filter and discover crypto opportunities by sector and metrics.</p>
+          </a>
+          
+          <a href="/" class="card">
+            <div class="card-icon">🤖</div>
+            <h3 class="card-title">AI CekCoin</h3>
+            <p class="card-desc">AI-powered instant coin analysis and insights.</p>
+          </a>
+          
+          <a href="/" class="card">
+            <div class="card-icon">🐋</div>
+            <h3 class="card-title">Whale Tracker</h3>
+            <p class="card-desc">Monitor smart money movements and large transactions.</p>
+          </a>
+          
+          <a href="/" class="card">
+            <div class="card-icon">📓</div>
+            <h3 class="card-title">Trading Journal</h3>
+            <p class="card-desc">Track trades, analyze performance, and improve discipline.</p>
+          </a>
+          
+          <a href="/" class="card">
+            <div class="card-icon">🧮</div>
+            <h3 class="card-title">Position Calculator</h3>
+            <p class="card-desc">Risk management and position sizing calculations.</p>
+          </a>
+          
+          <a href="/" class="card">
+            <div class="card-icon">⚖️</div>
+            <h3 class="card-title">Coin Compare</h3>
+            <p class="card-desc">Side-by-side comparison of cryptocurrencies.</p>
+          </a>
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px;">
+          <a href="/" class="btn btn-accent">Launch Super App →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" style="margin-top: 0; padding: 40px 0;">
+    <div class="container">
+      <div class="footer-bottom" style="border: none; margin: 0; padding: 0;">
+        <p class="footer-copy">© 2026 Ibnu Cryptosphere</p>
+        <a href="/" style="font-size: 0.9rem; color: var(--text-secondary);">← Back to Portal</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMobileMenu() {
+      document.getElementById('mobileMenu').classList.toggle('active');
+    }
+  </script>
+
+</body>
+</html>

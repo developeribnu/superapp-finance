@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Position Calculator | Cryptosphere Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #020617;
+      --bg-secondary: #0f172a;
+      --bg-card: #1e293b;
+      --bg-hover: #334155;
+      --border: #1e293b;
+      --border-light: #334155;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-gold: #f59e0b;
+      --accent-blue: #3b82f6;
+      --accent-green: #22c55e;
+      --accent-red: #ef4444;
+      --accent-purple: #8b5cf6;
+      --accent-cyan: #06b6d4;
+      --radius: 12px;
+      --radius-lg: 16px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --nav-height: 70px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding-top: var(--nav-height);
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-height);
+      background: rgba(2, 6, 23, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+    }
+    .navbar-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+    .brand-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent-gold) 0%, #fbbf24 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #000;
+    }
+    .navbar-nav { display: flex; align-items: center; gap: 4px; }
+    .nav-link {
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--text-primary);
+      background: rgba(245, 158, 11, 0.1);
+    }
+    .nav-item-dropdown { position: relative; }
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 8px;
+      min-width: 260px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.2s ease;
+      z-index: 1001;
+    }
+    .nav-item-dropdown:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text-secondary);
+      transition: all 0.15s;
+    }
+    .dropdown-item:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+    .dropdown-item-icon {
+      width: 32px; height: 32px;
+      background: var(--bg-hover);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 40px 0;
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, transparent 100%);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-gold);
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--accent-gold), #fbbf24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Calculator Grid */
+    .calculator {
+      padding: 40px 0;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 24px;
+    }
+
+    /* Card */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-title-icon {
+      width: 40px; height: 40px;
+      background: var(--bg-hover);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Form */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .form-group.full-width { grid-column: 1 / -1; }
+    .form-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+    }
+    .form-label-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .form-input, .form-select {
+      padding: 14px 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      transition: var(--transition);
+    }
+    .form-input:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
+    }
+    .form-select { cursor: pointer; }
+    
+    /* Quick Presets */
+    .presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .preset-btn {
+      padding: 6px 12px;
+      background: var(--bg-hover);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .preset-btn:hover, .preset-btn.active {
+      background: var(--accent-gold);
+      border-color: var(--accent-gold);
+      color: #000;
+    }
+
+    /* Calculate Button */
+    .calculate-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--accent-gold), #f59e0b);
+      border: none;
+      border-radius: 12px;
+      color: #000;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 24px;
+    }
+    .calculate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+    }
+
+    /* Results Panel */
+    .results-panel { position: sticky; top: 90px; }
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .result-item:last-child { border-bottom: none; }
+    .result-label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .result-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .result-value.positive { color: var(--accent-green); }
+    .result-value.negative { color: var(--accent-red); }
+    .result-value.highlight { color: var(--accent-gold); }
+    
+    /* Risk Meter */
+    .risk-meter {
+      margin: 24px 0;
+      padding: 20px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+    }
+    .risk-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+    }
+    .risk-bar {
+      height: 8px;
+      background: var(--bg-hover);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .risk-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-green) 0%, var(--accent-gold) 50%, var(--accent-red) 100%);
+      border-radius: 4px;
+      transition: width 0.3s;
+    }
+    
+    /* Warning Box */
+    .warning-box {
+      display: none;
+      margin-top: 20px;
+      padding: 16px;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: var(--radius);
+    }
+    .warning-box.show { display: block; }
+    .warning-title {
+      font-weight: 600;
+      color: var(--accent-red);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .warning-text {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    /* Info Cards */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 30px;
+    }
+    .info-card {
+      padding: 20px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-align: center;
+    }
+    .info-icon {
+      width: 48px; height: 48px;
+      background: var(--bg-card);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin: 0 auto 12px;
+    }
+    .info-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .info-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      margin-top: 40px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    .footer-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .footer-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 10px; }
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--text-primary); }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Mobile */
+    @media (max-width: 1024px) {
+      .calculator { grid-template-columns: 1fr; }
+      .results-panel { position: static; }
+      .info-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 1.75rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand">
+        <div class="brand-icon">₿</div>
+        <span class="brand-text">Cryptosphere</span>
+      </a>
+      <nav class="navbar-nav">
+        <a href="/" class="nav-link">Home</a>
+        <div class="nav-item-dropdown">
+          <a href="/" class="nav-link">Analytics ▾</a>
+          <div class="dropdown-menu">
+            <a href="/bitcoin-intelligence-hub.html" class="dropdown-item"><div class="dropdown-item-icon">₿</div><div><div class="dropdown-item-text">Bitcoin Intelligence</div></div></a>
+            <a href="/institutional-research-center.html" class="dropdown-item"><div class="dropdown-item-icon">🏛️</div><div><div class="dropdown-item-text">Institutional Research</div></div></a>
+            <a href="/macro-factors.html" class="dropdown-item"><div class="dropdown-item-icon">🌍</div><div><div class="dropdown-item-text">Macro Factors</div></div></a>
+            <a href="/onchain-analytics.html" class="dropdown-item"><div class="dropdown-item-icon">⛓️</div><div><div class="dropdown-item-text">On-Chain Analytics</div></div></a>
+            <a href="/derivatives-analytics.html" class="dropdown-item"><div class="dropdown-item-icon">📊</div><div><div class="dropdown-item-text">Derivatives</div></div></a>
+            <a href="/market-manipulation-intelligence.html" class="dropdown-item"><div class="dropdown-item-icon">🛡️</div><div><div class="dropdown-item-text">Security Intel</div></div></a>
+          </div>
+        </div>
+        <div class="nav-item-dropdown">
+          <a href="/portal/tools.html" class="nav-link active">Tools ▾</a>
+          <div class="dropdown-menu">
+            <a href="screener.html" class="dropdown-item"><div class="dropdown-item-icon">🎯</div><div><div class="dropdown-item-text">Screener</div></div></a>
+            <a href="ai-analyze.html" class="dropdown-item"><div class="dropdown-item-icon">🤖</div><div><div class="dropdown-item-text">AI Analyze</div></div></a>
+            <a href="whale-tracker.html" class="dropdown-item"><div class="dropdown-item-icon">🐋</div><div><div class="dropdown-item-text">Whale Tracker</div></div></a>
+            <a href="journal.html" class="dropdown-item"><div class="dropdown-item-icon">📓</div><div><div class="dropdown-item-text">Trading Journal</div></div></a>
+            <a href="position-calculator.html" class="dropdown-item"><div class="dropdown-item-icon">🧮</div><div><div class="dropdown-item-text">Calculator</div></div></a>
+            <a href="portfolio.html" class="dropdown-item"><div class="dropdown-item-icon">💼</div><div><div class="dropdown-item-text">Portfolio</div></div></a>
+          </div>
+        </div>
+        <a href="/" class="nav-link">Knowledge</a>
+        <a href="/" class="nav-link">Research</a>
+      </nav>
+      <div style="display: flex; gap: 12px;">
+        <a href="/" style="padding: 10px 18px; background: var(--accent-gold); color: #000; font-weight: 600; border-radius: 8px; text-decoration: none;">Launch App</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">🧮 RISK MANAGEMENT</div>
+      <h1>Position Calculator</h1>
+      <p class="hero-desc">Calculate optimal position sizes, risk/reward ratios, and leverage based on your account size and risk tolerance. Never risk more than you can afford to lose.</p>
+    </div>
+  </section>
+
+  <!-- Calculator -->
+  <div class="container">
+    <div class="calculator">
+      
+      <!-- Input Form -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-title-icon">📊</div>
+            Trade Parameters
+          </div>
+        </div>
+        
+        <form class="form-grid" onsubmit="event.preventDefault(); calculatePosition();">
+          <div class="form-group">
+            <label class="form-label">
+              Account Balance
+              <span class="form-label-hint">Your total trading capital</span>
+            </label>
+            <input type="number" class="form-input" id="accountBalance" placeholder="10000" value="10000">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Risk Per Trade
+              <span class="form-label-hint">% of account to risk</span>
+            </label>
+            <input type="number" class="form-input" id="riskPercent" placeholder="2" value="2" step="0.1">
+            <div class="presets">
+              <button type="button" class="preset-btn" onclick="setRisk(1)">1%</button>
+              <button type="button" class="preset-btn active" onclick="setRisk(2)">2%</button>
+              <button type="button" class="preset-btn" onclick="setRisk(3)">3%</button>
+              <button type="button" class="preset-btn" onclick="setRisk(5)">5%</button>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Entry Price
+              <span class="form-label-hint">Your planned entry</span>
+            </label>
+            <input type="number" class="form-input" id="entryPrice" placeholder="0.00" value="87234">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Stop Loss
+              <span class="form-label-hint">Price where you'll exit if wrong</span>
+            </label>
+            <input type="number" class="form-input" id="stopLoss" placeholder="0.00" value="85100">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Take Profit
+              <span class="form-label-hint">Target price for profit</span>
+            </label>
+            <input type="number" class="form-input" id="takeProfit" placeholder="0.00" value="92500">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Leverage
+              <span class="form-label-hint">Margin multiplier</span>
+            </label>
+            <select class="form-select" id="leverage">
+              <option value="1">1x (Spot)</option>
+              <option value="2">2x</option>
+              <option value="3">3x</option>
+              <option value="5" selected>5x</option>
+              <option value="10">10x</option>
+              <option value="20">20x</option>
+              <option value="50">50x</option>
+              <option value="100">100x</option>
+            </select>
+          </div>
+          
+          <div class="form-group full-width">
+            <label class="form-label">Trading Pair</label>
+            <select class="form-select" id="tradingPair">
+              <option>BTC/USDT</option>
+              <option>ETH/USDT</option>
+              <option>SOL/USDT</option>
+              <option>BNB/USDT</option>
+              <option>XRP/USDT</option>
+              <option>Other</option>
+            </select>
+          </div>
+          
+          <div class="form-group full-width">
+            <button type="submit" class="calculate-btn">🧮 Calculate Position</button>
+          </div>
+        </form>
+
+        <!-- Info Cards -->
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="info-icon">🎯</div>
+            <div class="info-title">Position Sizing</div>
+            <div class="info-desc">Proper position sizing is the key to long-term trading success</div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">⚠️</div>
+            <div class="info-title">Risk Management</div>
+            <div class="info-desc">Never risk more than 2-3% of your account on a single trade</div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">📈</div>
+            <div class="info-title">Risk/Reward</div>
+            <div class="info-desc">Aim for at least 1:2 risk/reward ratio for profitability</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Panel -->
+      <div class="results-panel">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon" style="background: rgba(34, 197, 94, 0.15);">💰</div>
+              Position Details
+            </div>
+          </div>
+          
+          <div class="result-item">
+            <span class="result-label">Position Size</span>
+            <span class="result-value highlight" id="positionSize">0.461 BTC</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Margin Required</span>
+            <span class="result-value" id="marginRequired">$804.12</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Risk Amount</span>
+            <span class="result-value negative" id="riskAmount">$200.00</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Potential Profit</span>
+            <span class="result-value positive" id="potentialProfit">$2,431.52</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Risk/Reward Ratio</span>
+            <span class="result-value highlight" id="riskReward">1 : 2.4</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Breakeven Price</span>
+            <span class="result-value" id="breakevenPrice">$87,456</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Liquidation Price</span>
+            <span class="result-value negative" id="liquidationPrice">$70,528</span>
+          </div>
+          
+          <!-- Risk Meter -->
+          <div class="risk-meter">
+            <div class="risk-label">
+              <span>Risk Level</span>
+              <span style="color: var(--accent-gold); font-weight: 600;" id="riskLevel">Moderate</span>
+            </div>
+            <div class="risk-bar">
+              <div class="risk-fill" style="width: 45%;" id="riskFill"></div>
+            </div>
+          </div>
+          
+          <!-- Warning Box -->
+          <div class="warning-box" id="warningBox">
+            <div class="warning-title">⚠️ High Risk Warning</div>
+            <div class="warning-text">This position exceeds recommended risk levels. Consider reducing position size or using a wider stop loss.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="/" class="footer-logo">
+            <div class="brand-icon" style="width: 32px; height: 32px; font-size: 1rem;">₿</div>
+            <span>Cryptosphere</span>
+          </a>
+          <p class="footer-desc">Professional crypto intelligence platform. Built for serious market participants.</p>
+        </div>
+        <div>
+          <div class="footer-title">Analytics</div>
+          <ul class="footer-links">
+            <li><a href="/bitcoin-intelligence-hub.html">Bitcoin Hub</a></li>
+            <li><a href="/institutional-research-center.html">Institutional</a></li>
+            <li><a href="/macro-factors.html">Macro</a></li>
+            <li><a href="/onchain-analytics.html">On-Chain</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title">Tools</div>
+          <ul class="footer-links">
+            <li><a href="screener.html">Screener</a></li>
+            <li><a href="whale-tracker.html">Whale Tracker</a></li>
+            <li><a href="journal.html">Trading Journal</a></li>
+            <li><a href="portfolio.html">Portfolio</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title">Resources</div>
+          <ul class="footer-links">
+            <li><a href="https://www.heyibnu.com" target="_blank">heyibnu.com</a></li>
+            <li><a href="https://github.com/subkhanibnuaji/crypto" target="_blank">GitHub</a></li>
+            <li><a href="https://www.heyibnu.com/contact" target="_blank">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p style="font-size: 0.85rem; color: var(--text-muted);">© 2026 Ibnu Cryptosphere. All rights reserved.</p>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">Trading involves substantial risk. Only trade with capital you can afford to lose.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function setRisk(percent) {
+      document.getElementById('riskPercent').value = percent;
+      document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    function calculatePosition() {
+      const balance = parseFloat(document.getElementById('accountBalance').value) || 0;
+      const riskPercent = parseFloat(document.getElementById('riskPercent').value) || 0;
+      const entry = parseFloat(document.getElementById('entryPrice').value) || 0;
+      const stop = parseFloat(document.getElementById('stopLoss').value) || 0;
+      const target = parseFloat(document.getElementById('takeProfit').value) || 0;
+      const leverage = parseInt(document.getElementById('leverage').value) || 1;
+      
+      if (!balance || !entry || !stop) return;
+      
+      const isLong = target > entry;
+      const riskAmount = balance * (riskPercent / 100);
+      const priceDiff = Math.abs(entry - stop);
+      const positionSize = riskAmount / priceDiff;
+      const positionValue = positionSize * entry;
+      const marginRequired = positionValue / leverage;
+      
+      // Calculate profit
+      const profitDiff = Math.abs(target - entry);
+      const potentialProfit = positionSize * profitDiff;
+      
+      // Risk/Reward ratio
+      const rr = potentialProfit / riskAmount;
+      
+      // Breakeven (accounting for fees ~0.1%)
+      const breakeven = entry * (isLong ? 1.001 : 0.999);
+      
+      // Liquidation price estimate
+      const liquidation = entry * (isLong ? (1 - 0.9/leverage) : (1 + 0.9/leverage));
+      
+      // Update UI
+      document.getElementById('positionSize').textContent = positionSize.toFixed(4) + ' BTC';
+      document.getElementById('marginRequired').textContent = '$' + marginRequired.toFixed(2);
+      document.getElementById('riskAmount').textContent = '$' + riskAmount.toFixed(2);
+      document.getElementById('potentialProfit').textContent = '$' + potentialProfit.toFixed(2);
+      document.getElementById('riskReward').textContent = '1 : ' + rr.toFixed(1);
+      document.getElementById('breakevenPrice').textContent = '$' + breakeven.toFixed(0);
+      document.getElementById('liquidationPrice').textContent = '$' + liquidation.toFixed(0);
+      
+      // Risk level
+      let riskLevel = 'Low';
+      let riskColor = '#22c55e';
+      let riskWidth = 25;
+      
+      if (riskPercent > 5 || leverage > 20) {
+        riskLevel = 'High';
+        riskColor = '#ef4444';
+        riskWidth = 85;
+      } else if (riskPercent > 2 || leverage > 10) {
+        riskLevel = 'Moderate';
+        riskColor = '#f59e0b';
+        riskWidth = 55;
+      }
+      
+      document.getElementById('riskLevel').textContent = riskLevel;
+      document.getElementById('riskLevel').style.color = riskColor;
+      document.getElementById('riskFill').style.width = riskWidth + '%';
+      
+      // Show warning if high risk
+      const warningBox = document.getElementById('warningBox');
+      if (riskPercent > 5 || leverage > 20) {
+        warningBox.classList.add('show');
+      } else {
+        warningBox.classList.remove('show');
+      }
+    }
+
+    // Auto-calculate on load
+    window.onload = calculatePosition;
+  </script>
+
+</body>
+</html>

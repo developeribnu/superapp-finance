@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whale Tracker | Cryptosphere Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg-primary: #020617;
+      --bg-secondary: #0f172a;
+      --bg-card: #1e293b;
+      --bg-hover: #334155;
+      --border: #1e293b;
+      --border-light: #334155;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-gold: #f59e0b;
+      --accent-blue: #3b82f6;
+      --accent-green: #22c55e;
+      --accent-red: #ef4444;
+      --accent-purple: #8b5cf6;
+      --accent-cyan: #06b6d4;
+      --radius: 12px;
+      --radius-lg: 16px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --nav-height: 70px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding-top: var(--nav-height);
+    }
+    .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-height);
+      background: rgba(2, 6, 23, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+    }
+    .navbar-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+    .brand-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent-gold) 0%, #fbbf24 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #000;
+    }
+    .navbar-nav { display: flex; align-items: center; gap: 4px; }
+    .nav-link {
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--text-primary);
+      background: rgba(245, 158, 11, 0.1);
+    }
+    .nav-item-dropdown { position: relative; }
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 8px;
+      min-width: 260px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.2s ease;
+      z-index: 1001;
+    }
+    .nav-item-dropdown:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text-secondary);
+      transition: all 0.15s;
+    }
+    .dropdown-item:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+    .dropdown-item-icon {
+      width: 32px; height: 32px;
+      background: var(--bg-hover);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 40px 0;
+      background: linear-gradient(180deg, rgba(6, 182, 212, 0.1) 0%, transparent 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 40px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+    }
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .hero-stat {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+    }
+    .hero-stat-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--accent-cyan);
+    }
+    .hero-stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Dashboard Grid */
+    .dashboard {
+      padding: 40px 0;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 24px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-title-icon {
+      width: 36px; height: 36px;
+      background: var(--bg-hover);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Live Feed */
+    .feed-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      border-left: 3px solid var(--accent-cyan);
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .feed-icon {
+      width: 44px; height: 44px;
+      background: var(--bg-card);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+    .feed-content { flex: 1; }
+    .feed-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .feed-details {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .feed-amount {
+      text-align: right;
+    }
+    .feed-amount-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+    .feed-time {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Wallet Table */
+    .wallet-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .wallet-table th,
+    .wallet-table td {
+      padding: 14px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .wallet-table th {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .wallet-table td {
+      font-size: 0.9rem;
+    }
+    .wallet-address {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-cyan);
+    }
+    .wallet-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: var(--accent-gold);
+    }
+    .wallet-balance {
+      font-weight: 600;
+    }
+    .wallet-change {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .wallet-change.positive {
+      background: rgba(34, 197, 94, 0.1);
+      color: var(--accent-green);
+    }
+    .wallet-change.negative {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--accent-red);
+    }
+
+    /* Alerts Panel */
+    .alert-config {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .alert-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+    }
+    .alert-info h4 {
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+    .alert-info p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .toggle {
+      width: 48px;
+      height: 26px;
+      background: var(--bg-hover);
+      border-radius: 13px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .toggle.active {
+      background: var(--accent-green);
+    }
+    .toggle::after {
+      content: '';
+      position: absolute;
+      width: 22px; height: 22px;
+      background: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s;
+    }
+    .toggle.active::after {
+      transform: translateX(22px);
+    }
+
+    /* Chart Container */
+    .chart-container {
+      height: 300px;
+      margin-top: 20px;
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 8px 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--accent-cyan);
+      color: #000;
+      border-color: var(--accent-cyan);
+    }
+
+    /* Sidebar */
+    .sidebar { position: sticky; top: 90px; }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      margin-top: 40px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    .footer-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .footer-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 10px; }
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--text-primary); }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Mobile */
+    @media (max-width: 1024px) {
+      .hero-content { flex-direction: column; text-align: center; }
+      .hero-stats { width: 100%; }
+      .dashboard { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .navbar-nav { display: none; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 1.75rem; }
+      .hero-stats { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand">
+        <div class="brand-icon">₿</div>
+        <span class="brand-text">Cryptosphere</span>
+      </a>
+      <nav class="navbar-nav">
+        <a href="/" class="nav-link">Home</a>
+        <div class="nav-item-dropdown">
+          <a href="/" class="nav-link">Analytics ▾</a>
+          <div class="dropdown-menu">
+            <a href="/bitcoin-intelligence-hub.html" class="dropdown-item">
+              <div class="dropdown-item-icon">₿</div>
+              <div><div class="dropdown-item-text">Bitcoin Intelligence</div></div>
+            </a>
+            <a href="/institutional-research-center.html" class="dropdown-item">
+              <div class="dropdown-item-icon">🏛️</div>
+              <div><div class="dropdown-item-text">Institutional Research</div></div>
+            </a>
+            <a href="/macro-factors.html" class="dropdown-item">
+              <div class="dropdown-item-icon">🌍</div>
+              <div><div class="dropdown-item-text">Macro Factors</div></div>
+            </a>
+            <a href="/onchain-analytics.html" class="dropdown-item">
+              <div class="dropdown-item-icon">⛓️</div>
+              <div><div class="dropdown-item-text">On-Chain Analytics</div></div>
+            </a>
+            <a href="/derivatives-analytics.html" class="dropdown-item">
+              <div class="dropdown-item-icon">📊</div>
+              <div><div class="dropdown-item-text">Derivatives</div></div>
+            </a>
+            <a href="/market-manipulation-intelligence.html" class="dropdown-item">
+              <div class="dropdown-item-icon">🛡️</div>
+              <div><div class="dropdown-item-text">Security Intel</div></div>
+            </a>
+          </div>
+        </div>
+        <div class="nav-item-dropdown">
+          <a href="/portal/tools.html" class="nav-link active">Tools ▾</a>
+          <div class="dropdown-menu">
+            <a href="screener.html" class="dropdown-item"><div class="dropdown-item-icon">🎯</div><div><div class="dropdown-item-text">Screener</div></div></a>
+            <a href="ai-analyze.html" class="dropdown-item"><div class="dropdown-item-icon">🤖</div><div><div class="dropdown-item-text">AI Analyze</div></div></a>
+            <a href="whale-tracker.html" class="dropdown-item"><div class="dropdown-item-icon">🐋</div><div><div class="dropdown-item-text">Whale Tracker</div></div></a>
+            <a href="journal.html" class="dropdown-item"><div class="dropdown-item-icon">📓</div><div><div class="dropdown-item-text">Trading Journal</div></div></a>
+            <a href="position-calculator.html" class="dropdown-item"><div class="dropdown-item-icon">🧮</div><div><div class="dropdown-item-text">Calculator</div></div></a>
+            <a href="portfolio.html" class="dropdown-item"><div class="dropdown-item-icon">💼</div><div><div class="dropdown-item-text">Portfolio</div></div></a>
+          </div>
+        </div>
+        <a href="/" class="nav-link">Knowledge</a>
+        <a href="/" class="nav-link">Research</a>
+      </nav>
+      <div style="display: flex; gap: 12px;">
+        <a href="/" style="padding: 10px 18px; background: var(--accent-gold); color: #000; font-weight: 600; border-radius: 8px; text-decoration: none;">Launch App</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div>
+          <div class="hero-badge">🐋 LIVE TRACKING</div>
+          <h1>Whale Tracker</h1>
+          <p class="hero-desc">Monitor large wallet movements, institutional flows, and smart money activity across Bitcoin, Ethereum, and major cryptocurrencies in real-time.</p>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-value" id="trackedWallets">2,847</div>
+            <div class="hero-stat-label">Tracked Wallets</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-value" id="24hVolume">$4.2B</div>
+            <div class="hero-stat-label">24h Whale Volume</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-value" id="activeAlerts">12</div>
+            <div class="hero-stat-label">Active Alerts</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard -->
+  <div class="container">
+    <div class="dashboard">
+      <!-- Main Content -->
+      <div class="main-content">
+        
+        <!-- Live Transaction Feed -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon">📡</div>
+              Live Transaction Feed
+            </div>
+            <div class="filter-bar">
+              <button class="filter-btn active" onclick="filterFeed('all')">All</button>
+              <button class="filter-btn" onclick="filterFeed('btc')">Bitcoin</button>
+              <button class="filter-btn" onclick="filterFeed('eth')">Ethereum</button>
+              <button class="filter-btn" onclick="filterFeed('inflow')">Exchange Inflow</button>
+              <button class="filter-btn" onclick="filterFeed('outflow')">Exchange Outflow</button>
+            </div>
+          </div>
+          <div id="feedContainer">
+            <!-- Feed items will be inserted by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Top Whale Wallets -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon">🏆</div>
+              Top Whale Wallets
+            </div>
+          </div>
+          <table class="wallet-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Wallet</th>
+                <th>Label</th>
+                <th>Balance</th>
+                <th>24h Change</th>
+                <th>Last Active</th>
+              </tr>
+            </thead>
+            <tbody id="walletTableBody">
+              <!-- Wallets inserted by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Flow Analysis Chart -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon">📊</div>
+              Exchange Flow Analysis (7 Days)
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="flowChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        
+        <!-- Alert Configuration -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon">🔔</div>
+              Alert Settings
+            </div>
+          </div>
+          <div class="alert-config">
+            <div class="alert-item">
+              <div class="alert-info">
+                <h4>🐋 Whale Transactions</h4>
+                <p>> $10M transfers</p>
+              </div>
+              <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+            </div>
+            <div class="alert-item">
+              <div class="alert-info">
+                <h4>🏦 Exchange Inflows</h4>
+                <p>Large deposits to exchanges</p>
+              </div>
+              <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+            </div>
+            <div class="alert-item">
+              <div class="alert-info">
+                <h4>💎 Accumulation</h4>
+                <p>Cold storage withdrawals</p>
+              </div>
+              <div class="toggle" onclick="this.classList.toggle('active')"></div>
+            </div>
+            <div class="alert-item">
+              <div class="alert-info">
+                <h4>🚨 Suspicious Activity</h4>
+                <p>Unusual patterns</p>
+              </div>
+              <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Market Impact -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon">💹</div>
+              Market Impact Score
+            </div>
+          </div>
+          <div class="chart-container" style="height: 200px;">
+            <canvas id="impactChart"></canvas>
+          </div>
+          <div style="margin-top: 16px; padding: 16px; background: var(--bg-secondary); border-radius: var(--radius);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+              <span style="color: var(--text-secondary);">Current Sentiment</span>
+              <span style="color: var(--accent-green); font-weight: 600;">Bullish ⬆️</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-secondary);">Net Flow (24h)</span>
+              <span style="color: var(--accent-green); font-weight: 600;">+$234M</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon">📈</div>
+              Quick Stats
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="color: var(--text-secondary);">BTC Whale Holdings</span>
+              <span style="font-weight: 600;">2.34M BTC</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="color: var(--text-secondary);">ETH Whale Holdings</span>
+              <span style="font-weight: 600;">18.2M ETH</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="color: var(--text-secondary);">Exchange Reserves</span>
+              <span style="font-weight: 600; color: var(--accent-red);">↓ 4.2%</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="color: var(--text-secondary);">New Whales (30d)</span>
+              <span style="font-weight: 600; color: var(--accent-green);">+127</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="/" class="footer-logo">
+            <div class="brand-icon" style="width: 32px; height: 32px; font-size: 1rem;">₿</div>
+            <span>Cryptosphere</span>
+          </a>
+          <p class="footer-desc">Professional crypto intelligence platform. Built for serious market participants.</p>
+        </div>
+        <div>
+          <div class="footer-title">Analytics</div>
+          <ul class="footer-links">
+            <li><a href="/bitcoin-intelligence-hub.html">Bitcoin Hub</a></li>
+            <li><a href="/institutional-research-center.html">Institutional</a></li>
+            <li><a href="/macro-factors.html">Macro</a></li>
+            <li><a href="/onchain-analytics.html">On-Chain</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title">Tools</div>
+          <ul class="footer-links">
+            <li><a href="screener.html">Screener</a></li>
+            <li><a href="whale-tracker.html">Whale Tracker</a></li>
+            <li><a href="journal.html">Trading Journal</a></li>
+            <li><a href="portfolio.html">Portfolio</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title">Resources</div>
+          <ul class="footer-links">
+            <li><a href="https://www.heyibnu.com" target="_blank">heyibnu.com</a></li>
+            <li><a href="https://github.com/subkhanibnuaji/crypto" target="_blank">GitHub</a></li>
+            <li><a href="https://www.heyibnu.com/contact" target="_blank">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p style="font-size: 0.85rem; color: var(--text-muted);">© 2026 Ibnu Cryptosphere. All rights reserved.</p>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">Data provided by Whale Alert, Glassnode & Glassnode</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mock Transaction Data
+    const transactions = [
+      { icon: '🐋', title: 'Massive BTC Transfer', details: 'bc1q...x8m2 → bc1q...9k3p', amount: '+$45.2M', time: '2 min ago', type: 'btc', direction: 'neutral' },
+      { icon: '🏦', title: 'Exchange Inflow Alert', details: '0x7a...f3e2 → Binance', amount: '-$28.5M', time: '5 min ago', type: 'eth', direction: 'inflow' },
+      { icon: '💎', title: 'Cold Storage Withdrawal', details: 'Coinbase → bc1q...m4n8', amount: '+$62.1M', time: '12 min ago', type: 'btc', direction: 'outflow' },
+      { icon: '📊', title: 'Institutional Accumulation', details: '0x4b...a9c1 → Unknown', amount: '+$15.8M', time: '18 min ago', type: 'eth', direction: 'neutral' },
+      { icon: '⚠️', title: 'Suspicious Pattern Detected', details: 'Multiple small → Single large', amount: '$8.3M', time: '24 min ago', type: 'btc', direction: 'neutral' },
+      { icon: '🏦', title: 'Exchange Inflow Alert', details: '0x2d...e7f5 → Coinbase', amount: '-$34.2M', time: '31 min ago', type: 'eth', direction: 'inflow' },
+    ];
+
+    // Render Feed
+    function renderFeed(filter = 'all') {
+      const container = document.getElementById('feedContainer');
+      container.innerHTML = '';
+      
+      transactions.forEach((tx, index) => {
+        if (filter !== 'all' && tx.type !== filter && tx.direction !== filter) return;
+        
+        const item = document.createElement('div');
+        item.className = 'feed-item';
+        item.style.animationDelay = `${index * 0.1}s`;
+        item.innerHTML = `
+          <div class="feed-icon">${tx.icon}</div>
+          <div class="feed-content">
+            <div class="feed-title">${tx.title}</div>
+            <div class="feed-details">${tx.details}</div>
+          </div>
+          <div class="feed-amount">
+            <div class="feed-amount-value">${tx.amount}</div>
+            <div class="feed-time">${tx.time}</div>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function filterFeed(type) {
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      renderFeed(type);
+    }
+
+    // Mock Wallet Data
+    const wallets = [
+      { rank: 1, address: 'bc1qxy2...8fg9h', label: 'MicroStrategy', balance: '189,000 BTC', change: '+1,434', changeType: 'positive', time: '2h ago' },
+      { rank: 2, address: '0x71C7...9A25', label: 'Grayscale', balance: '624,000 BTC', change: '-12,500', changeType: 'negative', time: '4h ago' },
+      { rank: 3, address: 'bc1qm3...4de5f', label: 'Unknown Whale', balance: '112,000 BTC', change: '+850', changeType: 'positive', time: '6h ago' },
+      { rank: 4, address: '0x4a8E...B72C', label: 'Jump Trading', balance: '45,000 BTC', change: '-2,100', changeType: 'negative', time: '1h ago' },
+      { rank: 5, address: 'bc1q9k...2mn4p', label: 'Tesla Inc', balance: '9,720 BTC', change: '0', changeType: 'neutral', time: '30d ago' },
+    ];
+
+    // Render Wallet Table
+    function renderWallets() {
+      const tbody = document.getElementById('walletTableBody');
+      tbody.innerHTML = wallets.map(w => `
+        <tr>
+          <td>#${w.rank}</td>
+          <td class="wallet-address">${w.address}</td>
+          <td><span class="wallet-tag">${w.label}</span></td>
+          <td class="wallet-balance">${w.balance}</td>
+          <td><span class="wallet-change ${w.changeType === 'positive' ? 'positive' : w.changeType === 'negative' ? 'negative' : ''}">${w.change > 0 ? '+' : ''}${w.change} BTC</span></td>
+          <td style="color: var(--text-muted); font-size: 0.85rem;">${w.time}</td>
+        </tr>
+      `).join('');
+    }
+
+    // Flow Chart
+    const flowCtx = document.getElementById('flowChart').getContext('2d');
+    new Chart(flowCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        datasets: [
+          {
+            label: 'Exchange Inflow',
+            data: [450, 380, 520, 420, 680, 290, 340],
+            backgroundColor: 'rgba(239, 68, 68, 0.6)',
+            borderColor: '#ef4444',
+            borderWidth: 1
+          },
+          {
+            label: 'Exchange Outflow',
+            data: [380, 520, 450, 580, 420, 390, 520],
+            backgroundColor: 'rgba(34, 197, 94, 0.6)',
+            borderColor: '#22c55e',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { labels: { color: '#94a3b8' } }
+        },
+        scales: {
+          x: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
+          y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
+        }
+      }
+    });
+
+    // Impact Chart
+    const impactCtx = document.getElementById('impactChart').getContext('2d');
+    new Chart(impactCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Exchange Outflow', 'Cold Storage', 'Active Trading', 'Unknown'],
+        datasets: [{
+          data: [45, 30, 15, 10],
+          backgroundColor: ['#22c55e', '#3b82f6', '#f59e0b', '#64748b'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { 
+            position: 'bottom',
+            labels: { color: '#94a3b8', font: { size: 11 }, padding: 10 } 
+          }
+        }
+      }
+    });
+
+    // Initialize
+    renderFeed();
+    renderWallets();
+
+    // Simulate live updates
+    setInterval(() => {
+      const stats = document.getElementById('24hVolume');
+      const current = parseFloat(stats.textContent.replace('$', '').replace('B', ''));
+      const newVal = (current + (Math.random() - 0.5) * 0.1).toFixed(1);
+      stats.textContent = `$${newVal}B`;
+    }, 5000);
+  </script>
+
+</body>
+</html>

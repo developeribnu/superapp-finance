@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crypto Screener | Cryptosphere Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #020617;
+      --bg-secondary: #0f172a;
+      --bg-card: #1e293b;
+      --bg-hover: #334155;
+      --border: #1e293b;
+      --border-light: #334155;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-gold: #f59e0b;
+      --accent-blue: #3b82f6;
+      --accent-green: #22c55e;
+      --accent-red: #ef4444;
+      --accent-purple: #8b5cf6;
+      --accent-cyan: #06b6d4;
+      --radius: 12px;
+      --radius-lg: 16px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --nav-height: 70px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding-top: var(--nav-height);
+    }
+    .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-height);
+      background: rgba(2, 6, 23, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+    }
+    .navbar-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+    .brand-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent-gold) 0%, #fbbf24 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #000;
+    }
+    .navbar-nav { display: flex; align-items: center; gap: 4px; }
+    .nav-link {
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--text-primary);
+      background: rgba(245, 158, 11, 0.1);
+    }
+    .nav-item-dropdown { position: relative; }
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 8px;
+      min-width: 260px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.2s ease;
+      z-index: 1001;
+    }
+    .nav-item-dropdown:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text-secondary);
+      transition: all 0.15s;
+    }
+    .dropdown-item:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+    .dropdown-item-icon {
+      width: 32px; height: 32px;
+      background: var(--bg-hover);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 40px 0;
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, transparent 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 40px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-gold);
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--accent-gold), #fbbf24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+    }
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .hero-stat {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+    }
+    .hero-stat-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--accent-gold);
+    }
+    .hero-stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Screener Container */
+    .screener { padding: 30px 0; }
+    
+    /* Filters */
+    .filters {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .filters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .filter-group { display: flex; flex-direction: column; gap: 8px; }
+    .filter-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .filter-input {
+      padding: 12px 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+    .filter-input:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+    }
+    .filter-select { cursor: pointer; }
+    .range-inputs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .range-inputs .filter-input { flex: 1; }
+
+    /* Filter Tags */
+    .filter-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .filter-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-tag:hover, .filter-tag.active {
+      background: rgba(245, 158, 11, 0.1);
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+    }
+    .filter-tag.active::before {
+      content: '✓';
+      font-weight: 700;
+    }
+
+    /* Action Bar */
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .results-count {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+    .results-count strong {
+      color: var(--text-primary);
+    }
+    .view-toggle {
+      display: flex;
+      gap: 8px;
+      background: var(--bg-card);
+      padding: 4px;
+      border-radius: 8px;
+    }
+    .view-btn {
+      padding: 8px 16px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .view-btn.active {
+      background: var(--accent-gold);
+      color: #000;
+    }
+
+    /* Results Table */
+    .results-table-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .results-table th {
+      padding: 16px 12px;
+      background: var(--bg-secondary);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .results-table th:hover {
+      background: var(--bg-hover);
+    }
+    .results-table td {
+      padding: 16px 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+    .results-table tr:hover {
+      background: rgba(245, 158, 11, 0.03);
+    }
+    
+    /* Coin Cell */
+    .coin-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .coin-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    .coin-info h4 {
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+    }
+    .coin-symbol {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    
+    /* Price & Change */
+    .price {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+    }
+    .change {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .change.positive {
+      background: rgba(34, 197, 94, 0.1);
+      color: var(--accent-green);
+    }
+    .change.negative {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--accent-red);
+    }
+    
+    /* Metrics */
+    .metric {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .metric-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    
+    /* Score Badge */
+    .score-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .score-high { background: rgba(34, 197, 94, 0.15); color: var(--accent-green); }
+    .score-med { background: rgba(245, 158, 11, 0.15); color: var(--accent-gold); }
+    .score-low { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); }
+    
+    /* Action Buttons */
+    .action-btns {
+      display: flex;
+      gap: 8px;
+    }
+    .action-btn {
+      width: 32px; height: 32px;
+      border: none;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .action-btn:hover {
+      background: var(--accent-gold);
+      color: #000;
+    }
+
+    /* Grid View */
+    .grid-view {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .coin-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      transition: all 0.2s;
+    }
+    .coin-card:hover {
+      border-color: var(--accent-gold);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.1);
+    }
+    .coin-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .coin-card-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 8px;
+    }
+    .coin-card-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .coin-card-stat {
+      display: flex;
+      flex-direction: column;
+    }
+    .coin-card-stat-value {
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .coin-card-stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 30px;
+      padding: 20px;
+    }
+    .page-btn {
+      padding: 10px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .page-btn:hover, .page-btn.active {
+      background: var(--accent-gold);
+      border-color: var(--accent-gold);
+      color: #000;
+    }
+    .page-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      margin-top: 40px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    .footer-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .footer-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 10px; }
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--text-primary); }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Mobile */
+    @media (max-width: 1024px) {
+      .hero-content { flex-direction: column; text-align: center; }
+      .hero-stats { width: 100%; }
+      .results-table { font-size: 0.8rem; }
+      .results-table th, .results-table td { padding: 12px 8px; }
+      .coin-icon { width: 28px; height: 28px; font-size: 1rem; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 1.75rem; }
+      .hero-stats { grid-template-columns: 1fr; }
+      .filters-grid { grid-template-columns: 1fr; }
+      .action-bar { flex-direction: column; gap: 16px; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand">
+        <div class="brand-icon">₿</div>
+        <span class="brand-text">Cryptosphere</span>
+      </a>
+      <nav class="navbar-nav">
+        <a href="/" class="nav-link">Home</a>
+        <div class="nav-item-dropdown">
+          <a href="/" class="nav-link">Analytics ▾</a>
+          <div class="dropdown-menu">
+            <a href="/bitcoin-intelligence-hub.html" class="dropdown-item"><div class="dropdown-item-icon">₿</div><div><div class="dropdown-item-text">Bitcoin Intelligence</div></div></a>
+            <a href="/institutional-research-center.html" class="dropdown-item"><div class="dropdown-item-icon">🏛️</div><div><div class="dropdown-item-text">Institutional Research</div></div></a>
+            <a href="/macro-factors.html" class="dropdown-item"><div class="dropdown-item-icon">🌍</div><div><div class="dropdown-item-text">Macro Factors</div></div></a>
+            <a href="/onchain-analytics.html" class="dropdown-item"><div class="dropdown-item-icon">⛓️</div><div><div class="dropdown-item-text">On-Chain Analytics</div></div></a>
+            <a href="/derivatives-analytics.html" class="dropdown-item"><div class="dropdown-item-icon">📊</div><div><div class="dropdown-item-text">Derivatives</div></div></a>
+            <a href="/market-manipulation-intelligence.html" class="dropdown-item"><div class="dropdown-item-icon">🛡️</div><div><div class="dropdown-item-text">Security Intel</div></div></a>
+          </div>
+        </div>
+        <div class="nav-item-dropdown">
+          <a href="/portal/tools.html" class="nav-link active">Tools ▾</a>
+          <div class="dropdown-menu">
+            <a href="screener.html" class="dropdown-item"><div class="dropdown-item-icon">🎯</div><div><div class="dropdown-item-text">Screener</div></div></a>
+            <a href="ai-analyze.html" class="dropdown-item"><div class="dropdown-item-icon">🤖</div><div><div class="dropdown-item-text">AI Analyze</div></div></a>
+            <a href="whale-tracker.html" class="dropdown-item"><div class="dropdown-item-icon">🐋</div><div><div class="dropdown-item-text">Whale Tracker</div></div></a>
+            <a href="journal.html" class="dropdown-item"><div class="dropdown-item-icon">📓</div><div><div class="dropdown-item-text">Trading Journal</div></div></a>
+            <a href="position-calculator.html" class="dropdown-item"><div class="dropdown-item-icon">🧮</div><div><div class="dropdown-item-text">Calculator</div></div></a>
+            <a href="portfolio.html" class="dropdown-item"><div class="dropdown-item-icon">💼</div><div><div class="dropdown-item-text">Portfolio</div></div></a>
+          </div>
+        </div>
+        <a href="/" class="nav-link">Knowledge</a>
+        <a href="/" class="nav-link">Research</a>
+      </nav>
+      <div style="display: flex; gap: 12px;">
+        <a href="/" style="padding: 10px 18px; background: var(--accent-gold); color: #000; font-weight: 600; border-radius: 8px; text-decoration: none;">Launch App</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div>
+          <div class="hero-badge">🎯 ADVANCED SCREENING</div>
+          <h1>Crypto Screener</h1>
+          <p class="hero-desc">Filter and discover crypto opportunities using advanced metrics, technical indicators, and fundamental analysis across 10,000+ tokens.</p>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-value">10,482</div>
+            <div class="hero-stat-label">Coins Tracked</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-value">48</div>
+            <div class="hero-stat-label">Filters Available</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-value">Real-time</div>
+            <div class="hero-stat-label">Price Updates</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Screener -->
+  <div class="container">
+    <div class="screener">
+      
+      <!-- Filters -->
+      <div class="filters">
+        <div class="filters-grid">
+          <div class="filter-group">
+            <label class="filter-label">Search</label>
+            <input type="text" class="filter-input" placeholder="Search coin name or symbol..." id="searchInput">
+          </div>
+          <div class="filter-group">
+            <label class="filter-label">Market Cap</label>
+            <div class="range-inputs">
+              <input type="text" class="filter-input" placeholder="Min" id="minMcap">
+              <span style="color: var(--text-muted);">-</span>
+              <input type="text" class="filter-input" placeholder="Max" id="maxMcap">
+            </div>
+          </div>
+          <div class="filter-group">
+            <label class="filter-label">Price Change (24h)</label>
+            <div class="range-inputs">
+              <input type="text" class="filter-input" placeholder="-100%" id="minChange">
+              <span style="color: var(--text-muted);">-</span>
+              <input type="text" class="filter-input" placeholder="+1000%" id="maxChange">
+            </div>
+          </div>
+          <div class="filter-group">
+            <label class="filter-label">Category</label>
+            <select class="filter-input filter-select" id="categoryFilter">
+              <option value="">All Categories</option>
+              <option value="layer1">Layer 1</option>
+              <option value="defi">DeFi</option>
+              <option value="gaming">Gaming</option>
+              <option value="ai">AI & Big Data</option>
+              <option value="meme">Meme Coins</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label class="filter-label">Volume (24h)</label>
+            <select class="filter-input filter-select" id="volumeFilter">
+              <option value="">Any Volume</option>
+              <option value="1m">> $1M</option>
+              <option value="10m">> $10M</option>
+              <option value="100m">> $100M</option>
+              <option value="1b">> $1B</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label class="filter-label">Risk Score</label>
+            <select class="filter-input filter-select" id="riskFilter">
+              <option value="">Any Risk</option>
+              <option value="low">Low Risk</option>
+              <option value="medium">Medium Risk</option>
+              <option value="high">High Risk</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Quick Tags -->
+        <div class="filter-tags">
+          <button class="filter-tag" onclick="this.classList.toggle('active')">🔥 Trending</button>
+          <button class="filter-tag" onclick="this.classList.toggle('active')">📈 Gainers</button>
+          <button class="filter-tag" onclick="this.classList.toggle('active')">📉 Losers</button>
+          <button class="filter-tag" onclick="this.classList.toggle('active')">💎 New Listings</button>
+          <button class="filter-tag active" onclick="this.classList.toggle('active')">🚀 High Volume</button>
+          <button class="filter-tag" onclick="this.classList.toggle('active')">🐋 Whale Accumulation</button>
+          <button class="filter-tag" onclick="this.classList.toggle('active')">⚠️ Oversold (RSI)</button>
+          <button class="filter-tag" onclick="this.classList.toggle('active')">🎯 Breakout Ready</button>
+        </div>
+      </div>
+
+      <!-- Action Bar -->
+      <div class="action-bar">
+        <div class="results-count">Showing <strong>1-25</strong> of <strong>2,847</strong> results</div>
+        <div class="view-toggle">
+          <button class="view-btn active" onclick="switchView('list')">☰ List</button>
+          <button class="view-btn" onclick="switchView('grid')">⊞ Grid</button>
+        </div>
+      </div>
+
+      <!-- Results Table -->
+      <div class="results-table-container" id="listView">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Coin</th>
+              <th>Price</th>
+              <th>1h %</th>
+              <th>24h %</th>
+              <th>7d %</th>
+              <th>Market Cap</th>
+              <th>Volume (24h)</th>
+              <th>RSI</th>
+              <th>Score</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="resultsBody">
+            <!-- Results inserted by JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Grid View (Hidden by default) -->
+      <div class="grid-view" id="gridView" style="display: none;">
+        <!-- Grid cards inserted by JS -->
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <button class="page-btn" disabled>← Previous</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">4</button>
+        <button class="page-btn">5</button>
+        <span style="color: var(--text-muted);">...</span>
+        <button class="page-btn">114</button>
+        <button class="page-btn">Next →</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="/" class="footer-logo">
+            <div class="brand-icon" style="width: 32px; height: 32px; font-size: 1rem;">₿</div>
+            <span>Cryptosphere</span>
+          </a>
+          <p class="footer-desc">Professional crypto intelligence platform. Built for serious market participants.</p>
+        </div>
+        <div>
+          <div class="footer-title">Analytics</div>
+          <ul class="footer-links">
+            <li><a href="/bitcoin-intelligence-hub.html">Bitcoin Hub</a></li>
+            <li><a href="/institutional-research-center.html">Institutional</a></li>
+            <li><a href="/macro-factors.html">Macro</a></li>
+            <li><a href="/onchain-analytics.html">On-Chain</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title">Tools</div>
+          <ul class="footer-links">
+            <li><a href="screener.html">Screener</a></li>
+            <li><a href="whale-tracker.html">Whale Tracker</a></li>
+            <li><a href="journal.html">Trading Journal</a></li>
+            <li><a href="portfolio.html">Portfolio</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title">Resources</div>
+          <ul class="footer-links">
+            <li><a href="https://www.heyibnu.com" target="_blank">heyibnu.com</a></li>
+            <li><a href="https://github.com/subkhanibnuaji/crypto" target="_blank">GitHub</a></li>
+            <li><a href="https://www.heyibnu.com/contact" target="_blank">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p style="font-size: 0.85rem; color: var(--text-muted);">© 2026 Ibnu Cryptosphere. All rights reserved.</p>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">Data provided by CoinGecko & CoinMarketCap</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mock Data
+    const coins = [
+      { rank: 1, name: 'Bitcoin', symbol: 'BTC', icon: '₿', iconBg: '#f7931a', price: 87234.56, change1h: 0.42, change24h: 2.18, change7d: 8.45, mcap: '1.72T', volume: '42.8B', rsi: 62, score: 92, scoreClass: 'score-high' },
+      { rank: 2, name: 'Ethereum', symbol: 'ETH', icon: 'Ξ', iconBg: '#627eea', price: 2341.89, change1h: 0.18, change24h: 1.45, change7d: 5.23, mcap: '282B', volume: '18.2B', rsi: 58, score: 88, scoreClass: 'score-high' },
+      { rank: 3, name: 'Solana', symbol: 'SOL', icon: '◎', iconBg: '#14f195', price: 198.42, change1h: -0.32, change24h: 4.82, change7d: 12.67, mcap: '94B', volume: '5.8B', rsi: 71, score: 85, scoreClass: 'score-high' },
+      { rank: 4, name: 'XRP', symbol: 'XRP', icon: '✕', iconBg: '#23292f', price: 2.58, change1h: 1.24, change24h: -1.12, change7d: -3.45, mcap: '148B', volume: '4.2B', rsi: 45, score: 72, scoreClass: 'score-med' },
+      { rank: 5, name: 'Cardano', symbol: 'ADA', icon: '₳', iconBg: '#0033ad', price: 0.78, change1h: 0.85, change24h: 3.21, change7d: 8.92, mcap: '28B', volume: '890M', rsi: 54, score: 78, scoreClass: 'score-med' },
+      { rank: 6, name: 'Avalanche', symbol: 'AVAX', icon: '⬡', iconBg: '#e84142', price: 26.34, change1h: -1.24, change24h: 5.67, change7d: 15.23, mcap: '11B', volume: '620M', rsi: 68, score: 82, scoreClass: 'score-high' },
+      { rank: 7, name: 'Chainlink', symbol: 'LINK', icon: '⬡', iconBg: '#375bd2', price: 18.92, change1h: 2.14, change24h: 8.45, change7d: 22.18, mcap: '12B', volume: '1.2B', rsi: 78, score: 79, scoreClass: 'score-med' },
+      { rank: 8, name: 'Sui', symbol: 'SUI', icon: '∞', iconBg: '#4bc0c0', price: 3.45, change1h: 3.28, change24h: 12.56, change7d: 28.42, mcap: '10B', volume: '1.8B', rsi: 82, score: 76, scoreClass: 'score-med' },
+      { rank: 9, name: 'Dogecoin', symbol: 'DOGE', icon: 'Ð', iconBg: '#c2a633', price: 0.24, change1h: -0.54, change24h: -2.18, change7d: -5.23, mcap: '35B', volume: '1.5B', rsi: 38, score: 45, scoreClass: 'score-low' },
+      { rank: 10, name: 'Polkadot', symbol: 'DOT', icon: '●', iconBg: '#e6007a', price: 4.82, change1h: 0.12, change24h: 1.34, change7d: 3.45, mcap: '7B', volume: '180M', rsi: 48, score: 68, scoreClass: 'score-med' },
+      { rank: 11, name: 'Near Protocol', symbol: 'NEAR', icon: '◉', iconBg: '#00c08b', price: 3.28, change1h: 1.85, change24h: 6.42, change7d: 18.23, mcap: '4B', volume: '320M', rsi: 65, score: 81, scoreClass: 'score-high' },
+      { rank: 12, name: 'Aptos', symbol: 'APT', icon: '◉', iconBg: '#000', price: 6.12, change1h: -0.92, change24h: 4.18, change7d: 11.56, mcap: '3B', volume: '280M', rsi: 59, score: 74, scoreClass: 'score-med' },
+      { rank: 13, name: 'Arbitrum', symbol: 'ARB', icon: '◯', iconBg: '#28a0f0', price: 0.48, change1h: 0.74, change24h: 2.95, change7d: 7.23, mcap: '2B', volume: '150M', rsi: 52, score: 70, scoreClass: 'score-med' },
+      { rank: 14, name: 'Optimism', symbol: 'OP', icon: '☀', iconBg: '#ff0420', price: 1.12, change1h: -1.45, change24h: -3.28, change7d: -8.12, mcap: '1.5B', volume: '120M', rsi: 35, score: 58, scoreClass: 'score-low' },
+      { rank: 15, name: 'Injective', symbol: 'INJ', icon: '◉', iconBg: '#00a3ff', price: 14.28, change1h: 2.56, change24h: 9.12, change7d: 24.56, mcap: '1.4B', volume: '180M', rsi: 74, score: 83, scoreClass: 'score-high' },
+    ];
+
+    function formatChange(val) {
+      const positive = val >= 0;
+      return `<span class="change ${positive ? 'positive' : 'negative'}">${positive ? '▲' : '▼'} ${Math.abs(val).toFixed(2)}%</span>`;
+    }
+
+    function renderList() {
+      const tbody = document.getElementById('resultsBody');
+      tbody.innerHTML = coins.map(coin => `
+        <tr>
+          <td>${coin.rank}</td>
+          <td>
+            <div class="coin-cell">
+              <div class="coin-icon" style="background: ${coin.iconBg}20; color: ${coin.iconBg};">${coin.icon}</div>
+              <div class="coin-info">
+                <h4>${coin.name}</h4>
+                <div class="coin-symbol">${coin.symbol}</div>
+              </div>
+            </div>
+          </td>
+          <td class="price">$${coin.price.toLocaleString()}</td>
+          <td>${formatChange(coin.change1h)}</td>
+          <td>${formatChange(coin.change24h)}</td>
+          <td>${formatChange(coin.change7d)}</td>
+          <td class="metric">$${coin.mcap}</td>
+          <td class="metric">$${coin.volume}</td>
+          <td><span style="color: ${coin.rsi > 70 ? '#ef4444' : coin.rsi < 30 ? '#22c55e' : '#94a3b8'}">${coin.rsi}</span></td>
+          <td><span class="score-badge ${coin.scoreClass}">${coin.score}</span></td>
+          <td>
+            <div class="action-btns">
+              <button class="action-btn" title="Add to Watchlist">★</button>
+              <button class="action-btn" title="View Details">👁</button>
+              <button class="action-btn" title="Trade">💱</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderGrid() {
+      const container = document.getElementById('gridView');
+      container.innerHTML = coins.map(coin => `
+        <div class="coin-card">
+          <div class="coin-card-header">
+            <div class="coin-cell">
+              <div class="coin-icon" style="background: ${coin.iconBg}20; color: ${coin.iconBg}; width: 44px; height: 44px; font-size: 1.5rem;">${coin.icon}</div>
+              <div class="coin-info">
+                <h4>${coin.name}</h4>
+                <div class="coin-symbol">${coin.symbol}</div>
+              </div>
+            </div>
+            <span class="score-badge ${coin.scoreClass}">${coin.score}</span>
+          </div>
+          <div class="coin-card-price">$${coin.price.toLocaleString()}</div>
+          <div style="margin-top: 8px;">${formatChange(coin.change24h)}</div>
+          <div class="coin-card-stats">
+            <div class="coin-card-stat">
+              <div class="coin-card-stat-value">$${coin.mcap}</div>
+              <div class="coin-card-stat-label">Market Cap</div>
+            </div>
+            <div class="coin-card-stat">
+              <div class="coin-card-stat-value">$${coin.volume}</div>
+              <div class="coin-card-stat-label">Volume</div>
+            </div>
+            <div class="coin-card-stat">
+              <div class="coin-card-stat-value" style="color: ${coin.rsi > 70 ? '#ef4444' : coin.rsi < 30 ? '#22c55e' : '#94a3b8'}">${coin.rsi}</div>
+              <div class="coin-card-stat-label">RSI</div>
+            </div>
+            <div class="coin-card-stat">
+              <div class="coin-card-stat-value">${formatChange(coin.change7d).replace(/<[^>]*>/g, '')}</div>
+              <div class="coin-card-stat-label">7d</div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function switchView(view) {
+      document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      if (view === 'list') {
+        document.getElementById('listView').style.display = 'block';
+        document.getElementById('gridView').style.display = 'none';
+      } else {
+        document.getElementById('listView').style.display = 'none';
+        document.getElementById('gridView').style.display = 'grid';
+        renderGrid();
+      }
+    }
+
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase();
+      // In real app, this would filter the data
+      console.log('Searching for:', term);
+    });
+
+    // Initialize
+    renderList();
+  </script>
+
+</body>
+</html>

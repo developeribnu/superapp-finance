@@ -1,0 +1,101 @@
+[
+  {
+    "name": "Deposito Bank BUMN",
+    "category": "perbankan",
+    "riskLevel": "rendah",
+    "returnRange": "2.5-3%",
+    "minInvestment": "Rp 10 juta",
+    "taxRate": "PPh Final 20%",
+    "liquidity": "rendah",
+    "horizon": "1-12 bulan",
+    "description": "Simpanan berjangka di bank BUMN dengan bunga tetap, dijamin LPS hingga Rp 2 miliar."
+  },
+  {
+    "name": "Reksadana Pasar Uang (RDPU)",
+    "category": "investasi",
+    "riskLevel": "rendah",
+    "returnRange": "4-6%",
+    "minInvestment": "Rp 10.000",
+    "taxRate": "Bebas pajak",
+    "liquidity": "tinggi",
+    "horizon": "< 1 tahun",
+    "description": "Reksadana yang berinvestasi di instrumen pasar uang. Cocok untuk dana darurat."
+  },
+  {
+    "name": "SBN Ritel (ORI/SBR)",
+    "category": "investasi",
+    "riskLevel": "rendah",
+    "returnRange": "6.3-6.5%",
+    "minInvestment": "Rp 1 juta",
+    "taxRate": "PPh Final 10%",
+    "liquidity": "sedang",
+    "horizon": "2-3 tahun",
+    "description": "Surat Berharga Negara ritel, dijamin pemerintah Indonesia. Aman dan return di atas deposito."
+  },
+  {
+    "name": "Reksadana Pendapatan Tetap",
+    "category": "investasi",
+    "riskLevel": "sedang",
+    "returnRange": "6-9%",
+    "minInvestment": "Rp 10.000",
+    "taxRate": "Bebas pajak",
+    "liquidity": "tinggi",
+    "horizon": "1-3 tahun",
+    "description": "Reksadana berbasis obligasi. Risiko moderat dengan return lebih tinggi dari RDPU."
+  },
+  {
+    "name": "Emas",
+    "category": "emas",
+    "riskLevel": "sedang",
+    "returnRange": "5-15%",
+    "minInvestment": "Rp 10.000 (digital)",
+    "taxRate": "PPh 22 (0.25-0.45%)",
+    "liquidity": "tinggi",
+    "horizon": "3-5+ tahun",
+    "description": "Safe haven dan hedge inflasi. Harga berfluktuasi berdasarkan kondisi global."
+  },
+  {
+    "name": "Reksadana Saham",
+    "category": "investasi",
+    "riskLevel": "tinggi",
+    "returnRange": "10-20%+",
+    "minInvestment": "Rp 10.000",
+    "taxRate": "Bebas pajak",
+    "liquidity": "tinggi",
+    "horizon": "5+ tahun",
+    "description": "Reksadana yang mayoritas berinvestasi di saham. Volatil namun potensi return tinggi."
+  },
+  {
+    "name": "Saham (IDX)",
+    "category": "investasi",
+    "riskLevel": "tinggi",
+    "returnRange": "Variable",
+    "minInvestment": "~Rp 100.000 (1 lot)",
+    "taxRate": "PPh Final 0.1% (jual)",
+    "liquidity": "tinggi",
+    "horizon": "5+ tahun",
+    "description": "Kepemilikan langsung di perusahaan publik di Bursa Efek Indonesia."
+  },
+  {
+    "name": "P2P Lending (Lender)",
+    "category": "fintech",
+    "riskLevel": "tinggi",
+    "returnRange": "8-18%",
+    "minInvestment": "Rp 100.000",
+    "taxRate": "PPh 15%",
+    "liquidity": "rendah",
+    "horizon": "3-12 bulan",
+    "description": "Mendanai pinjaman via platform. Return tinggi tapi risiko gagal bayar signifikan."
+  },
+  {
+    "name": "Crypto (BTC/ETH)",
+    "category": "crypto",
+    "riskLevel": "sangat-tinggi",
+    "returnRange": "Sangat volatile",
+    "minInvestment": "Rp 10.000",
+    "taxRate": "PPh 0.1% + PPN 0.11%",
+    "liquidity": "tinggi",
+    "horizon": "5+ tahun (HODL)",
+    "description": "Aset digital spekulatif. Volatilitas sangat tinggi, hanya gunakan uang dingin max 5-10% portfolio."
+  }
+]

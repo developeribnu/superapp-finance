@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cryptosphere Portal | Command Center</title>
+  <meta name="description" content="Ibnu Cryptosphere - Professional crypto intelligence, analytics, and research platform.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/portal-v2.css">
+</head>
+<body>
+
+  <!-- Navbar with Dropdown -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand">
+        <div class="brand-icon">₿</div>
+        <span class="brand-text">Cryptosphere</span>
+      </a>
+      
+      <nav class="navbar-nav">
+        <a href="/" class="nav-link active">Home</a>
+        
+        <div class="nav-item-dropdown">
+          <a href="/" class="nav-link">Analytics ▾</a>
+          <div class="dropdown-menu">
+            <div class="dropdown-header">Deep Analysis</div>
+            <a href="/bitcoin-intelligence-hub.html" class="dropdown-item">
+              <div class="dropdown-item-icon">₿</div>
+              <div>
+                <div class="dropdown-item-text">Bitcoin Intelligence</div>
+                <div class="dropdown-item-desc">6-tab comprehensive analysis</div>
+              </div>
+            </a>
+            <a href="/institutional-research-center.html" class="dropdown-item">
+              <div class="dropdown-item-icon">🏛️</div>
+              <div>
+                <div class="dropdown-item-text">Institutional Research</div>
+                <div class="dropdown-item-desc">ETF flows & corporate holdings</div>
+              </div>
+            </a>
+            <a href="/macro-factors.html" class="dropdown-item">
+              <div class="dropdown-item-icon">🌍</div>
+              <div>
+                <div class="dropdown-item-text">Macro Factors</div>
+                <div class="dropdown-item-desc">Fed policy & economics</div>
+              </div>
+            </a>
+            <a href="/onchain-analytics.html" class="dropdown-item">
+              <div class="dropdown-item-icon">⛓️</div>
+              <div>
+                <div class="dropdown-item-text">On-Chain Analytics</div>
+                <div class="dropdown-item-desc">Exchange flows & NUPL</div>
+              </div>
+            </a>
+            <a href="/derivatives-analytics.html" class="dropdown-item">
+              <div class="dropdown-item-icon">📊</div>
+              <div>
+                <div class="dropdown-item-text">Derivatives</div>
+                <div class="dropdown-item-desc">Funding rates & liquidations</div>
+              </div>
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="/market-manipulation-intelligence.html" class="dropdown-item">
+              <div class="dropdown-item-icon">🛡️</div>
+              <div>
+                <div class="dropdown-item-text">Security Intel</div>
+                <div class="dropdown-item-desc">Fraud detection & protection</div>
+              </div>
+            </a>
+          </div>
+        </div>
+        
+        <a href="tools.html" class="nav-link">Tools</a>
+        <a href="/" class="nav-link">Knowledge</a>
+        <a href="/" class="nav-link">Research</a>
+      </nav>
+      
+      <div class="navbar-actions">
+        <a href="/" class="nav-cta">Launch App</a>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()">×</button>
+    <nav class="mobile-nav-links">
+      <a href="/" class="mobile-nav-link active">Home</a>
+      <a href="/bitcoin-intelligence-hub.html" class="mobile-nav-link">Bitcoin Intelligence</a>
+      <a href="/institutional-research-center.html" class="mobile-nav-link">Institutional Research</a>
+      <a href="/macro-factors.html" class="mobile-nav-link">Macro Factors</a>
+      <a href="/onchain-analytics.html" class="mobile-nav-link">On-Chain Analytics</a>
+      <a href="/derivatives-analytics.html" class="mobile-nav-link">Derivatives</a>
+      <a href="/market-manipulation-intelligence.html" class="mobile-nav-link">Security Intel</a>
+      
+      <div class="mobile-nav-section">
+        <div class="mobile-nav-title">Platform</div>
+        <a href="/" class="mobile-nav-link">Tools</a>
+        <a href="/" class="mobile-nav-link">Knowledge</a>
+        <a href="/" class="mobile-nav-link">Research</a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Main Content -->
+  <main class="main">
+    
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-badge">Portal v2.0</div>
+        <h1>Crypto Intelligence<br>Command Center</h1>
+        <p>Professional-grade analytics, institutional research, and trading intelligence. Built for serious market participants.</p>
+        <div class="hero-actions">
+          <a href="/bitcoin-intelligence-hub.html" class="btn btn-accent">Bitcoin Hub</a>
+          <a href="/" class="btn btn-secondary">Market Data</a>
+          <a href="/" class="btn btn-ghost">Super App →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Workspaces -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Workspaces</h2>
+            <p class="section-desc">Organized by domain for efficient workflow</p>
+          </div>
+        </div>
+        
+        <div class="cards-grid">
+          <a href="/" class="card">
+            <div class="card-icon">📊</div>
+            <h3 class="card-title">Market Intelligence</h3>
+            <p class="card-desc">BTC probability models, cycle analysis, market flows, and risk indicators.</p>
+            <div class="card-meta">6 Tools • Real-time</div>
+          </a>
+          
+          <a href="/" class="card">
+            <div class="card-icon">🛠️</div>
+            <h3 class="card-title">Trading Tools</h3>
+            <p class="card-desc">Screeners, calculators, portfolio trackers, and execution utilities.</p>
+            <div class="card-meta">10+ Tools</div>
+          </a>
+          
+          <a href="/" class="card">
+            <div class="card-icon">📚</div>
+            <h3 class="card-title">Knowledge Base</h3>
+            <p class="card-desc">Strategy frameworks, risk systems, and platform intelligence.</p>
+            <div class="card-meta">8 Sections</div>
+          </a>
+          
+          <a href="/" class="card">
+            <div class="card-icon">🔬</div>
+            <h3 class="card-title">Research</h3>
+            <p class="card-desc">Institutional reports, finance dashboards, and deep-dive analysis.</p>
+            <div class="card-meta">4 Reports</div>
+          </a>
+          
+          <a href="/institutional-research-center.html" class="card card-featured">
+            <div class="card-icon">🏛️</div>
+            <h3 class="card-title">Institutional</h3>
+            <p class="card-desc">ETF flows, corporate holdings, CBDC tracker, and banking research.</p>
+            <div class="card-meta">New • Live Data</div>
+          </a>
+          
+          <a href="/market-manipulation-intelligence.html" class="card card-featured">
+            <div class="card-icon">🛡️</div>
+            <h3 class="card-title">Security Intel</h3>
+            <p class="card-desc">Fraud detection, manipulation analysis, and protection strategies.</p>
+            <div class="card-meta">Security</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Analytics -->
+    <section class="section" style="background: var(--bg-subtle); margin: 0; padding: 60px 0;">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Advanced Analytics</h2>
+            <p class="section-desc">Deep-dive dashboards for sophisticated analysis</p>
+          </div>
+          <a href="/" class="section-action">View All →</a>
+        </div>
+        
+        <div class="featured-grid">
+          <a href="/bitcoin-intelligence-hub.html" class="card card-featured">
+            <div class="card-icon" style="background: rgba(245,158,11,0.15);">₿</div>
+            <h3 class="card-title">Bitcoin Intelligence Hub</h3>
+            <p class="card-desc">Comprehensive 6-tab analysis: Technical, On-Chain, Derivatives, Cycle & Macro, and Intelligence.</p>
+            <div class="links-list">
+              <span class="link-chip">Overview</span>
+              <span class="link-chip">Technical</span>
+              <span class="link-chip">On-Chain</span>
+              <span class="link-chip">Derivatives</span>
+            </div>
+          </a>
+          
+          <a href="/macro-factors.html" class="card">
+            <div class="card-icon">🌍</div>
+            <h3 class="card-title">Macro Factors</h3>
+            <p class="card-desc">Fed policy tracker, DXY correlation, inflation data, recession models, and economic calendar.</p>
+            <div class="card-meta">Economic Intelligence</div>
+          </a>
+          
+          <a href="/onchain-analytics.html" class="card">
+            <div class="card-icon">⛓️</div>
+            <h3 class="card-title">On-Chain Analytics</h3>
+            <p class="card-desc">Exchange flows, NUPL, SOPR, holder analysis, and stablecoin metrics.</p>
+            <div class="card-meta">Blockchain Data</div>
+          </a>
+          
+          <a href="/derivatives-analytics.html" class="card">
+            <div class="card-icon">📉</div>
+            <h3 class="card-title">Derivatives</h3>
+            <p class="card-desc">Funding rates, open interest, liquidation heatmaps, and options flow.</p>
+            <div class="card-meta">Futures & Perps</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Links -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Quick Access</h2>
+            <p class="section-desc">Frequently used resources</p>
+          </div>
+        </div>
+        
+        <div class="featured-grid">
+          <div class="card">
+            <h3 class="card-title" style="font-size: 1rem; margin-bottom: 16px;">Finance Research Package</h3>
+            <p class="card-desc">Zero-loss strategy comprehensive research report.</p>
+            <div class="links-list">
+              <a href="/research/finance-investment-dashboard-platform-intelligence.html" class="link-chip" target="_blank">Web</a>
+              <a href="/assets/files/finance-investment-dashboard-platform-intelligence-comprehensive-research-report.pdf" class="link-chip" target="_blank">PDF</a>
+            </div>
+          </div>
+          
+          <div class="card">
+            <h3 class="card-title" style="font-size: 1rem; margin-bottom: 16px;">Platform Intel</h3>
+            <p class="card-desc">Analysis of 40+ cryptocurrency platforms worldwide.</p>
+            <div class="links-list">
+              <a href="/legacy.html#platform-intel" class="link-chip">View Intel</a>
+              <a href="/legacy.html" class="link-chip">Legacy Page</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="brand-icon" style="width: 32px; height: 32px; font-size: 1rem;">₿</div>
+            <span>Cryptosphere</span>
+          </div>
+          <p class="footer-desc">Professional crypto intelligence platform. Institutional-grade research, analytics, and trading tools.</p>
+        </div>
+        
+        <div>
+          <h4 class="footer-title">Platform</h4>
+          <ul class="footer-links">
+            <li><a href="/">Market</a></li>
+            <li><a href="/">Tools</a></li>
+            <li><a href="/">Knowledge</a></li>
+            <li><a href="/">Research</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="footer-title">Analytics</h4>
+          <ul class="footer-links">
+            <li><a href="/bitcoin-intelligence-hub.html">Bitcoin Hub</a></li>
+            <li><a href="/institutional-research-center.html">Institutional</a></li>
+            <li><a href="/macro-factors.html">Macro</a></li>
+            <li><a href="/onchain-analytics.html">On-Chain</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="footer-title">Resources</h4>
+          <ul class="footer-links">
+            <li><a href="/">Super App</a></li>
+            <li><a href="/legacy.html">Legacy Archive</a></li>
+            <li><a href="https://www.heyibnu.com" target="_blank">heyibnu.com</a></li>
+            <li><a href="https://github.com/subkhanibnuaji/crypto" target="_blank">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 Ibnu Cryptosphere. All rights reserved.</p>
+        <div class="footer-social">
+          <a href="https://www.heyibnu.com/contact" target="_blank">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMobileMenu() {
+      document.getElementById('mobileMenu').classList.toggle('active');
+    }
+  </script>
+
+</body>
+</html>

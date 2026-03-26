@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library | Cryptosphere Portal</title>
+  <meta name="description" content="Curated library for books, decks, PDFs, and research materials inside the Cryptosphere portal.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/portal-v2.css">
+  <style>
+    body.library-page {
+      background:
+        radial-gradient(circle at top left, rgba(245, 158, 11, 0.12), transparent 26%),
+        radial-gradient(circle at top right, rgba(249, 115, 22, 0.08), transparent 22%),
+        linear-gradient(180deg, #fffdf8 0%, #faf7ef 100%);
+      color: var(--text-primary);
+    }
+
+    .library-page .navbar {
+      background: rgba(255, 251, 240, 0.9);
+      border-bottom-color: rgba(17, 17, 17, 0.08);
+    }
+
+    .library-page .main {
+      padding-top: var(--nav-height);
+      padding-bottom: 48px;
+    }
+
+    .library-shell {
+      position: relative;
+    }
+
+    .library-shell::before,
+    .library-shell::after {
+      content: "";
+      position: absolute;
+      inset: auto;
+      width: 240px;
+      height: 240px;
+      border-radius: 999px;
+      filter: blur(80px);
+      opacity: 0.45;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .library-shell::before {
+      top: 80px;
+      left: -40px;
+      background: rgba(251, 191, 36, 0.18);
+    }
+
+    .library-shell::after {
+      top: 360px;
+      right: -60px;
+      background: rgba(245, 158, 11, 0.14);
+    }
+
+    .library-shell > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .library-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .library-breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .library-breadcrumb a:hover {
+      color: var(--text-primary);
+    }
+
+    .library-breadcrumb-sep {
+      color: #d4a746;
+    }
+
+    .library-hero {
+      padding: 56px 0 30px;
+    }
+
+    .library-hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.8fr);
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .library-copy {
+      padding: 10px 0;
+      animation: fade-up 0.55s ease both;
+    }
+
+    .library-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.22);
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #b45309;
+      margin-bottom: 18px;
+    }
+
+    .library-copy h1 {
+      font-size: clamp(2.5rem, 4.2vw, 4.4rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+      margin-bottom: 18px;
+      max-width: 10ch;
+    }
+
+    .library-copy p {
+      max-width: 620px;
+      font-size: 1.05rem;
+      color: #5f5a4f;
+      margin-bottom: 22px;
+    }
+
+    .library-hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 20px;
+      border-radius: 10px;
+      border: 1px solid rgba(17, 17, 17, 0.08);
+      background: rgba(255, 255, 255, 0.68);
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.18s ease;
+    }
+
+    .btn-outline:hover {
+      transform: translateY(-1px);
+      border-color: rgba(245, 158, 11, 0.35);
+      background: #fff;
+    }
+
+    .library-stats-panel {
+      padding: 26px;
+      border-radius: 28px;
+      border: 1px solid rgba(17, 17, 17, 0.08);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 250, 239, 0.95) 100%);
+      box-shadow: 0 18px 50px rgba(86, 54, 8, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      animation: fade-up 0.65s ease both;
+    }
+
+    .library-stats-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .library-stats-header h2 {
+      font-size: 1.1rem;
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .library-stats-header p {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+    }
+
+    .library-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: #111;
+      color: #fff;
+      font-size: 0.74rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .library-status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #f59e0b;
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.16);
+    }
+
+    .library-stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .library-stat {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(17, 17, 17, 0.06);
+    }
+
+    .library-stat strong {
+      display: block;
+      font-size: 1.6rem;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin-bottom: 8px;
+    }
+
+    .library-stat span {
+      display: block;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+
+    .library-checklist {
+      display: grid;
+      gap: 10px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .library-checklist li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.92rem;
+      color: #554f43;
+    }
+
+    .library-checklist li::before {
+      content: "✓";
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: rgba(245, 158, 11, 0.14);
+      color: #b45309;
+      font-size: 0.8rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .library-toolbar {
+      padding: 22px 0 18px;
+    }
+
+    .library-toolbar-card {
+      padding: 24px;
+      border-radius: 24px;
+      border: 1px solid rgba(17, 17, 17, 0.08);
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 20px 50px rgba(84, 56, 13, 0.08);
+      animation: fade-up 0.75s ease both;
+    }
+
+    .library-toolbar-top {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .library-toolbar-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .library-toolbar-text {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .library-count {
+      font-size: 0.9rem;
+      color: #7c5d13;
+      font-weight: 700;
+    }
+
+    .library-search {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(17, 17, 17, 0.08);
+      background: #fffdf9;
+      margin-bottom: 16px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .library-search:focus-within {
+      border-color: rgba(245, 158, 11, 0.42);
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.08);
+    }
+
+    .library-search-icon {
+      font-size: 1rem;
+      color: #b45309;
+    }
+
+    .library-search input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 0.96rem;
+      color: var(--text-primary);
+    }
+
+    .library-search input::placeholder {
+      color: #9b8b72;
+    }
+
+    .library-filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .library-filter {
+      border: 1px solid rgba(17, 17, 17, 0.08);
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text-secondary);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .library-filter:hover,
+    .library-filter.active {
+      border-color: rgba(245, 158, 11, 0.34);
+      background: rgba(245, 158, 11, 0.12);
+      color: #a16207;
+    }
+
+    .section-compact {
+      padding-top: 24px;
+      padding-bottom: 18px;
+    }
+
+    .library-shelves {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .library-shelf {
+      padding: 24px;
+      border-radius: 24px;
+      color: #fff;
+      text-decoration: none;
+      min-height: 240px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 22px 44px rgba(28, 25, 23, 0.14);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      animation: fade-up 0.82s ease both;
+    }
+
+    .library-shelf:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 28px 52px rgba(28, 25, 23, 0.18);
+    }
+
+    .library-shelf::after {
+      content: "";
+      position: absolute;
+      inset: auto -30px -80px auto;
+      width: 180px;
+      height: 180px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      filter: blur(4px);
+    }
+
+    .library-shelf-warm {
+      background: linear-gradient(135deg, #9a3412 0%, #ea580c 55%, #fb923c 100%);
+    }
+
+    .library-shelf-dark {
+      background: linear-gradient(135deg, #111827 0%, #1f2937 52%, #374151 100%);
+    }
+
+    .library-shelf-sand {
+      background: linear-gradient(135deg, #5b4426 0%, #9a6b2b 52%, #d4a546 100%);
+    }
+
+    .library-shelf-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      align-self: flex-start;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .library-shelf h3 {
+      font-size: 1.45rem;
+      line-height: 1.08;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .library-shelf p {
+      font-size: 0.93rem;
+      color: rgba(255, 255, 255, 0.82);
+      max-width: 32ch;
+      position: relative;
+      z-index: 1;
+    }
+
+    .library-shelf-meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .library-shelf-meta span {
+      font-size: 0.8rem;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .library-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .library-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(17, 17, 17, 0.08);
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 18px 44px rgba(91, 66, 18, 0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      animation: fade-up 0.9s ease both;
+    }
+
+    .library-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(245, 158, 11, 0.28);
+      box-shadow: 0 24px 54px rgba(91, 66, 18, 0.12);
+    }
+
+    .library-card[hidden] {
+      display: none;
+    }
+
+    .library-cover {
+      min-height: 178px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .library-cover::after {
+      content: "";
+      position: absolute;
+      inset: auto -32px -48px auto;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .cover-amber {
+      background: linear-gradient(145deg, #92400e 0%, #d97706 50%, #fbbf24 100%);
+    }
+
+    .cover-indigo {
+      background: linear-gradient(145deg, #312e81 0%, #4338ca 48%, #818cf8 100%);
+    }
+
+    .cover-carbon {
+      background: linear-gradient(145deg, #0f172a 0%, #1e293b 48%, #475569 100%);
+    }
+
+    .cover-emerald {
+      background: linear-gradient(145deg, #064e3b 0%, #059669 50%, #6ee7b7 100%);
+    }
+
+    .cover-ruby {
+      background: linear-gradient(145deg, #7f1d1d 0%, #dc2626 52%, #fca5a5 100%);
+    }
+
+    .cover-sand {
+      background: linear-gradient(145deg, #5b3b1e 0%, #9a6b2b 46%, #eab308 100%);
+    }
+
+    .library-format {
+      display: inline-flex;
+      align-self: flex-start;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
+    .library-cover-title {
+      position: relative;
+      z-index: 1;
+    }
+
+    .library-cover-title strong {
+      display: block;
+      font-size: 1.25rem;
+      line-height: 1.05;
+      margin-bottom: 8px;
+      letter-spacing: -0.03em;
+      max-width: 12ch;
+    }
+
+    .library-cover-title span {
+      display: block;
+      font-size: 0.86rem;
+      color: rgba(255, 255, 255, 0.82);
+      max-width: 24ch;
+    }
+
+    .library-card-body {
+      padding: 22px 22px 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 16px;
+    }
+
+    .library-eyebrow {
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #b45309;
+      margin-bottom: 8px;
+    }
+
+    .library-card h3 {
+      font-size: 1.12rem;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .library-card p {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.58;
+    }
+
+    .library-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .library-tags span {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #f8f4ea;
+      border: 1px solid rgba(17, 17, 17, 0.06);
+      font-size: 0.76rem;
+      color: #6b5d44;
+    }
+
+    .library-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-top: auto;
+      padding-top: 2px;
+    }
+
+    .library-meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+
+    .library-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: #111;
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.86rem;
+      font-weight: 700;
+      white-space: nowrap;
+      transition: transform 0.18s ease, opacity 0.18s ease;
+    }
+
+    .library-link:hover {
+      transform: translateY(-1px);
+      opacity: 0.92;
+    }
+
+    .library-empty {
+      margin-top: 20px;
+      padding: 26px;
+      text-align: center;
+      border-radius: 20px;
+      border: 1px dashed rgba(17, 17, 17, 0.12);
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--text-secondary);
+    }
+
+    .library-callout {
+      margin-top: 16px;
+      padding: 30px;
+      border-radius: 28px;
+      border: 1px solid rgba(17, 17, 17, 0.08);
+      background:
+        linear-gradient(135deg, rgba(255, 252, 244, 0.96) 0%, rgba(255, 247, 230, 0.98) 100%);
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: center;
+      flex-wrap: wrap;
+      box-shadow: 0 20px 50px rgba(84, 56, 13, 0.08);
+      animation: fade-up 0.96s ease both;
+    }
+
+    .library-callout-label {
+      display: inline-block;
+      margin-bottom: 10px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #b45309;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .library-callout h2 {
+      font-size: 1.7rem;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      margin-bottom: 10px;
+      max-width: 18ch;
+    }
+
+    .library-callout p {
+      max-width: 58ch;
+      color: #645d51;
+    }
+
+    .library-callout-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    @keyframes fade-up {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 1120px) {
+      .library-hero-grid,
+      .library-shelves,
+      .library-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .library-hero-grid {
+        align-items: start;
+      }
+    }
+
+    @media (max-width: 880px) {
+      .library-hero-grid,
+      .library-shelves,
+      .library-grid,
+      .library-stat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .library-copy h1 {
+        max-width: 12ch;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .library-page .navbar-actions {
+        gap: 4px;
+      }
+
+      .library-page .nav-cta {
+        display: none;
+      }
+
+      .library-hero {
+        padding-top: 38px;
+      }
+
+      .library-toolbar-card,
+      .library-stats-panel,
+      .library-callout {
+        padding: 22px;
+      }
+
+      .library-copy h1 {
+        font-size: 2.35rem;
+      }
+
+      .library-card-body,
+      .library-shelf {
+        padding: 20px;
+      }
+
+      .library-card-footer {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body class="library-page">
+
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/portal/index.html" class="navbar-brand">
+        <div class="brand-icon">₿</div>
+        <span class="brand-text">Cryptosphere</span>
+      </a>
+
+      <nav class="navbar-nav">
+        <a href="/portal/index.html" class="nav-link">Home</a>
+        <a href="/portal/market.html" class="nav-link">Market</a>
+        <a href="/portal/tools.html" class="nav-link">Tools</a>
+        <a href="/portal/knowledge.html" class="nav-link active">Library</a>
+        <a href="/portal/research.html" class="nav-link">Research</a>
+      </nav>
+
+      <div class="navbar-actions">
+        <a href="/superapp.html" class="nav-cta">Launch Super App</a>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Open mobile menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Close mobile menu">×</button>
+    <nav class="mobile-nav-links">
+      <a href="/portal/index.html" class="mobile-nav-link">Home</a>
+      <a href="/portal/market.html" class="mobile-nav-link">Market</a>
+      <a href="/portal/tools.html" class="mobile-nav-link">Tools</a>
+      <a href="/portal/knowledge.html" class="mobile-nav-link">Library</a>
+      <a href="/portal/research.html" class="mobile-nav-link">Research</a>
+      <a href="/superapp.html" class="mobile-nav-link" style="color: #b45309;">Super App →</a>
+    </nav>
+  </div>
+
+  <main class="main">
+    <div class="library-shell">
+      <section class="library-hero">
+        <div class="container">
+          <div class="library-breadcrumb" aria-label="Breadcrumb">
+            <a href="/portal/index.html">Portal</a>
+            <span class="library-breadcrumb-sep">/</span>
+            <a href="/portal/research.html">Knowledge</a>
+            <span class="library-breadcrumb-sep">/</span>
+            <span>Library</span>
+          </div>
+
+          <div class="library-hero-grid">
+            <div class="library-copy">
+              <div class="library-badge">Curated Intake for Books and Shared Materials</div>
+              <h1>Library page for books, decks, and user-shared resources.</h1>
+              <p>
+                A cleaner receiving page inspired by modern knowledge hubs. Books, PDFs, material viewers,
+                archived notes, and research pages are grouped like a proper library so incoming user content
+                is easier to browse and reuse.
+              </p>
+              <div class="library-hero-actions">
+                <a href="#libraryCollection" class="btn btn-accent">Browse Collection</a>
+                <a href="/portal/research.html" class="btn-outline">Open Research Workspace</a>
+              </div>
+            </div>
+
+            <aside class="library-stats-panel" aria-label="Library status">
+              <div class="library-stats-header">
+                <div>
+                  <h2>Material intake is now organized like a real catalog.</h2>
+                  <p>Structured cards, visual covers, tags, and fast filtering for daily review.</p>
+                </div>
+                <div class="library-status-pill">
+                  <span class="library-status-dot"></span>
+                  Live Shelf
+                </div>
+              </div>
+
+              <div class="library-stat-grid">
+                <div class="library-stat">
+                  <strong>15</strong>
+                  <span>library items ready to open</span>
+                </div>
+                <div class="library-stat">
+                  <strong>6</strong>
+                  <span>formats: deck, report, PDF, EPUB, archive, dashboard</span>
+                </div>
+                <div class="library-stat">
+                  <strong>3</strong>
+                  <span>featured shelves for quick navigation</span>
+                </div>
+                <div class="library-stat">
+                  <strong>1</strong>
+                  <span>single search to scan everything on page</span>
+                </div>
+              </div>
+
+              <ul class="library-checklist">
+                <li>Useful for books or materials sent by users.</li>
+                <li>Fast to extend by duplicating one library card block.</li>
+                <li>Still consistent with the current portal structure.</li>
+              </ul>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="library-toolbar">
+        <div class="container">
+          <div class="library-toolbar-card">
+            <div class="library-toolbar-top">
+              <div>
+                <div class="library-toolbar-title">Search and filter the full collection</div>
+                <p class="library-toolbar-text">Use quick filters to jump between decks, reports, materials, PDFs, EPUB files, and archives.</p>
+              </div>
+              <div class="library-count" id="libraryCount">15 items available</div>
+            </div>
+
+            <label class="library-search" for="librarySearch">
+              <span class="library-search-icon">⌕</span>
+              <input id="librarySearch" type="search" placeholder="Search title, topic, category, or format...">
+            </label>
+
+            <div class="library-filters" aria-label="Library filters">
+              <button class="library-filter active" type="button" data-filter="all">All</button>
+              <button class="library-filter" type="button" data-filter="deck">Decks</button>
+              <button class="library-filter" type="button" data-filter="report">Reports</button>
+              <button class="library-filter" type="button" data-filter="material">Materials</button>
+              <button class="library-filter" type="button" data-filter="pdf">PDF</button>
+              <button class="library-filter" type="button" data-filter="epub">EPUB</button>
+              <button class="library-filter" type="button" data-filter="archive">Archive</button>
+              <button class="library-filter" type="button" data-filter="dashboard">Dashboards</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-compact">
+        <div class="container">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Featured shelves</h2>
+              <p class="section-desc">Highlighted entry points inspired by the reference library layout.</p>
+            </div>
+          </div>
+
+          <div class="library-shelves">
+            <a href="/legacy.html#knowledge" class="library-shelf library-shelf-warm">
+              <div class="library-shelf-label">Starter Shelf</div>
+              <div>
+                <h3>Foundations for strategy and capital protection.</h3>
+                <p>Begin with the core framework before moving into specific analytics or archived research.</p>
+              </div>
+              <div class="library-shelf-meta">
+                <span>Strategy Deck</span>
+                <span>Risk System</span>
+                <span>Allocation</span>
+              </div>
+            </a>
+
+            <a href="/portal/research.html" class="library-shelf library-shelf-dark">
+              <div class="library-shelf-label">Research Shelf</div>
+              <div>
+                <h3>Reports, source pages, and long-form intelligence.</h3>
+                <p>For deeper reading when you need working documents, source evidence, or downloadable files.</p>
+              </div>
+              <div class="library-shelf-meta">
+                <span>Reports</span>
+                <span>PDF Files</span>
+                <span>Source Notes</span>
+              </div>
+            </a>
+
+            <a href="/superapp.html" class="library-shelf library-shelf-sand">
+              <div class="library-shelf-label">Operator Shelf</div>
+              <div>
+                <h3>Dashboards and material pages used while executing.</h3>
+                <p>Jump from reading directly into tools, analytics, and operational monitoring pages.</p>
+              </div>
+              <div class="library-shelf-meta">
+                <span>Market Dashboards</span>
+                <span>Macro Pages</span>
+                <span>Security Intel</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="libraryCollection">
+        <div class="container">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Library collection</h2>
+              <p class="section-desc">Each card can represent a book, a user-submitted material, a PDF report, or a working reference page.</p>
+            </div>
+          </div>
+
+          <div class="library-grid" id="libraryGrid">
+            <article class="library-card" data-category="deck material" data-search="strategy deck philosophy allocation risk system platform intelligence">
+              <div class="library-cover cover-amber">
+                <span class="library-format">Deck</span>
+                <div class="library-cover-title">
+                  <strong>Crypto Strategy Deck</strong>
+                  <span>8-part framework for philosophy, market structure, allocation, and risk.</span>
+                </div>
+              </div>
+              <div class="library-card-body">
+                <div>
+                  <div class="library-eyebrow">Featured framework</div>
+                  <h3>Crypto/DeFi Strategy Deck</h3>
+                  <p>The main operating handbook for decision-making, built as a living document inside the legacy knowledge section.</p>
+                </div>
+                <div class="library-tags">
+                  <span>Philosophy</span>
+                  <span>Allocation</span>
+                  <span>Risk</span>
+                </div>
+                <div class="library-card-footer">
+                  <div class="library-meta">
+                    <span>8 sections</span>
+                    <span>Living document</span>
+                  </div>
+                  <a href="/legacy.html#knowledge" class="library-link">Open deck</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="library-card" data-category="report material" data-search="platform intelligence report 40 platforms rankings metrics global">
+              <div class="library-cover cover-carbon">
+                <span class="library-format">Report</span>
+                <div class="library-cover-title">
+                  <strong>Platform Intelligence</strong>
+                  <span>Global platform landscape, rankings, category splits, and positioning notes.</span>
+                </div>
+              </div>
+              <div class="library-card-body">
+                <div>
+                  <div class="library-eyebrow">Research collection</div>
+                  <h3>Platform Intelligence Overview</h3>
+                  <p>A strong example of a card for a user-shared market report, with summary context before opening the full page.</p>
+                </div>
+                <div class="library-tags">
+                  <span>Rankings</span>
+                  <span>Platforms</span>
+                  <span>Research</span>
+                </div>
+                <div class="library-card-footer">
+                  <div class="library-meta">
+                    <span>40+ platforms</span>
+                    <span>Comparison view</span>
+                  </div>
+                  <a href="/legacy.html#platform-intel" class="library-link">Open report</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="library-card" data-category="report pdf" data-search="finance investment dashboard platform intelligence report pdf research">
+              <div class="library-cover cover-sand">
+                <span class="library-format">PDF Report</span>
+                <div class="library-cover-title">
+                  <strong>Finance Dashboard Intelligence</strong>
+                  <span>Long-form platform research prepared as a polished report and downloadable file.</span>
+                </div>
+              </div>
+              <div class="library-card-body">
+                <div>
+                  <div class="library-eyebrow">Long-form research</div>
+                  <h3>Finance &amp; Investment Dashboard Report</h3>
+                  <p>Ideal layout for substantial user-submitted materials that need both a rendered page and a PDF destination.</p>
+                </div>
+                <div class="library-tags">
+                  <span>Finance</span>
+                  <span>Report</span>
+                  <span>PDF</span>
+                </div>
+                <div class="library-card-footer">
+                  <div class="library-meta">
+                    <span>February 2026</span>
+                    <span>Downloadable</span>
+                  </div>
+                  <a href="/research/finance-investment-dashboard-platform-intelligence.html" class="library-link">Read page</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="library-card" data-category="material" data-search="material viewer slides deck viewer finance investment dashboard shared material">
+              <div class="library-cover cover-indigo">
+                <span class="library-format">Material</span>
+                <div class="library-cover-title">
+                  <strong>Material Viewer</strong>
+                  <span>Reader-friendly layout for slide-style or visual materials sent by users.</span>
+                </div>
+              </div>
+              <div class="library-card-body">
+                <div>
+                  <div class="library-eyebrow">Viewer mode</div>
+                  <h3>Material Viewer</h3>
+                  <p>Useful when a submission should feel like a curated teaching page instead of a raw document or archive dump.</p>
+                </div>
+                <div class="library-tags">
+                  <span>Slides</span>
+                  <span>Viewer</span>
+                  <span>Teaching</span>
+                </div>
+                <div class="library-card-footer">
+                  <div class="library-meta">
+                    <span>Visual format</span>
+                    <span>Fast scan</span>
+                  </div>
+                  <a href="/research/finance-investment-dashboard-platform-intelligence-material.html" class="library-link">Open viewer</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="library-card" data-category="archive material" data-search="source notes archive references citations source explorer finance investment dashboard">
+              <div class="library-cover cover-emerald">
+                <span class="library-format">Archive</span>
+                <div class="library-cover-title">
+                  <strong>Source Explorer</strong>
+                  <span>Structured references and working notes for validation-heavy research.</span>
+                </div>
+              </div>
+              <div class="library-card-body">
+                <div>
+                  <div class="library-eyebrow">Reference file</div>
+                  <h3>Research Source Explorer</h3>
+                  <p>Good for submissions that require traceability, citations, or supporting notes behind the polished final material.</p>
+                </div>
+                <div class="library-tags">
+                  <span>Sources</span>
+                  <span>References</span>
+                  <span>Notes</span>
+                </div>
+                <div class="library-card-footer">
+                  <div class="library-meta">
+                    <span>Supporting evidence</span>
+                    <span>Archive ready</span>
+                  </div>
+                  <a href="/research/finance-investment-dashboard-platform-intelligence-source.html" class="library-link">Open sources</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="library-card" data-category="pdf" data-search="pdf file download research finance investment dashboard report book material">
+              <div class="library-cover cover-ruby">
+                <span class="library-format">PDF</span>
+                <div class="library-cover-title">
+                  <strong>Direct File Access</strong>
+                  <span>For users who want the material immediately as a file without page navigation.</span>
+                </div>
+              </div>
+              <div class="library-card-body">
+                <div>
+                  <div class="library-eyebrow">Download option</div>
+                  <h3>Open the Research PDF</h3>
+                  <p>A dedicated card for downloadable materials keeps the library usable for both readers and file-first users.</p>
+                </div>
+                <div class="library-tags">
+                  <span>Download</span>
+                  <span>Portable</span>
+                  <span>Attachment</span>
+                </div>
+                <div class="library-card-footer">
+                  <div class="library-meta">
+                    <span>PDF asset</span>
+                    <span>Single click</span>
+                  </div>
+                  <a href="/assets/files/finance-investment-dashboard-platform-intelligence-comprehensive-research-report.pdf" class="library-link">Open PDF</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="library-card" data-category="pdf report material" data-search="algo bots and the law technology automation regulation futures derivatives gregory scopino finance investment pdf">
+              <div class="library-cover cover-carbon">
+                <span class="library-format">Book PDF</span>
+                <div class="library-cover-title">
+                  <strong>Algo Bots and the Law</strong>
+                  <span>Technology, automation, and regulation across futures and other derivatives markets.</span>
+                </div>
+              </div>
+              <div class="library-card-body">
+                <div>
+                  <div class="library-eyebrow">New library entry</div>
+                  <h3>Algo Bots and the Law</h3>
+                  <p>A focused book for market structure, trading automation, and legal-regulatory context in futures and derivatives.</p>
+                </div>
+                <div class="library-tags">
+                  <span>Gregory Scopino</span>
+                  <span>Futures</span>
+                  <span>Derivatives Law</span>
+                </div>
+                <div class="library-card-footer">
+                  <div class="library-meta">
+                    <span>Finance &amp; Investment</span>
+                    <span>PDF</span>
+                  </div>
+                  <a href="https://github.com/subkhanibnuaji/library/blob/main/ebooks/algo-bots-and-the-law-technology-automation-and-the-regulation-of-futures-and-other-derivatives.pdf?raw=1" class="library-link" target="_blank" rel="noopener noreferrer">Read PDF</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="library-card" data-category="pdf material report" data-search="applied cryptography protocols algorithms source code in c 20th anniversary edition bruce schneier security cyber defense pdf">
+              <div class="library-cover cover-indigo">
+                <span class="library-format">Book PDF</span>
+                <div class="library-cover-title">
+                  <strong>Applied Cryptography</strong>
+                  <span>Protocols, algorithms, and implementation-oriented cryptography reference by Bruce Schneier.</span>
+                </div>
+              </div>
+              <div class="library-card-body">
+                <div>
+                  <div class="library-eyebrow">New library entry</div>
+                  <h3>Applied Cryptography</h3>
+                  <p>A foundational PDF for protocols, cryptographic primitives, and source-code-oriented security study.</p>
+                </div>
+                <div class="library-tags">
+                  <span>Bruce Schneier</span>
+                  <span>Cryptography</span>
+                  <span>Protocols</span>
+                </div>
+                <div class="library-card-footer">
+                  <div class="library-meta">
+                    <span>Cybersecurity &amp; Hacking</span>
+                    <span>PDF</span>
+                  </div>
+                  <a href="https://github.com/subkhanibnuaji/library/blob/main/ebooks/applied-cryptography-protocols-algorithms-and-source-code-in-c-20th-anniversary-edition.pdf?raw=1" class="library-link" target="_blank" rel="noopener noreferrer">Read PDF</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="library-card" data-category="epub material book" data-search="crypto confidential an insider's account from the frontlines of fraud jake donoghue fraud investigation exchange collapse crypto book epub">
+              <div class="library-cover cover-ruby">
+                <span class="library-format">Book EPUB</span>
+                <div class="library-cover-title">
+                  <strong>Crypto Confidential</strong>
+                  <span>An insider account from the frontlines of fraud across the crypto industry.</span>
+                </div>
+              </div>
+              <div class="library-card-body">
+                <div>
+                  <div class="library-eyebrow">New library entry</div>
+                  <h3>Crypto Confidential: An Insider's Account from the Frontlines of Fraud</h3>
+                  <p>A fraud-focused crypto memoir and investigative narrative covering operational failure, misconduct, and collapse dynamics inside the industry.</p>
+                </div>
+                <div class="library-tags">
+                  <span>Jake Donoghue</span>
+                  <span>Fraud</span>
+                  <span>Crypto History</span>
+                </div>
+                <div class="library-card-footer">
+                  <div class="library-meta">
+                    <span>Crypto</span>
+                    <span>EPUB</span>
+                  </div>
+                  <a href="/assets/files/crypto-confidential-an-insiders-account-from-the-frontlines-of-fraud.epub" class="library-link">Open EPUB</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="library-card" data-category="epub material book" data-search="crypto confidential winning and losing millions in the new frontier of finance nathaniel eliason nat eliason trading speculation defi nft crypto book epub">
+              <div class="library-cover cover-amber">
+                <span class="library-format">Book EPUB</span>
+                <div class="library-cover-title">
+                  <strong>Crypto Confidential</strong>
+                  <span>Winning and losing millions in the new frontier of finance.</span>
+                </div>
+              </div>
+              <div class="library-card-body">
+                <div>
+                  <div class="library-eyebrow">New library entry</div>
+                  <h3>Crypto Confidential: Winning and Losing Millions in the New Frontier of Finance</h3>
+                  <p>An insider memoir on speculation, DeFi, hacking, NFTs, and the incentives that defined crypto's hyper-volatile boom-and-bust cycle.</p>
+                </div>
+                <div class="library-tags">
+                  <span>Nathaniel Eliason</span>
+                  <span>DeFi</span>
+                  <span>Market Cycles</span>
+                </div>
+                <div class="library-card-footer">
+                  <div class="library-meta">
+                    <span>Finance</span>
+                    <span>EPUB</span>
+                  </div>
+                  <a href="/assets/files/crypto-confidential-winning-and-losing-millions-in-the-new-frontier-of-finance.epub" class="library-link">Open EPUB</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="library-card" data-category="epub material book" data-search="cryptography apocalypse preparing for the day when quantum computing breaks today's crypto roger a grimes post quantum cryptography security book epub">
+              <div class="library-cover cover-emerald">
+                <span class="library-format">Book EPUB</span>
+                <div class="library-cover-title">
+                  <strong>Cryptography Apocalypse</strong>
+                  <span>Preparing for the day when quantum computing breaks today's crypto.</span>
+                </div>
+              </div>
+              <div class="library-card-body">
+                <div>
+                  <div class="library-eyebrow">New library entry</div>
+                  <h3>Cryptography Apocalypse</h3>
+                  <p>A practical guide to post-quantum risk, modern encryption exposure, and how quantum breakthroughs could impact internet and crypto security.</p>
+                </div>
+                <div class="library-tags">
+                  <span>Roger A. Grimes</span>
+                  <span>Quantum</span>
+                  <span>Security</span>
+                </div>
+                <div class="library-card-footer">
+                  <div class="library-meta">
+                    <span>Cybersecurity</span>
+                    <span>EPUB</span>
+                  </div>
+                  <a href="/assets/files/cryptography-apocalypse-preparing-for-the-day-when-quantum-computing-breaks-todays-crypto.epub" class="library-link">Open EPUB</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="library-card" data-category="dashboard report" data-search="bitcoin intelligence dashboard technical onchain derivatives macro intelligence">
+              <div class="library-cover cover-amber">
+                <span class="library-format">Dashboard</span>
+                <div class="library-cover-title">
+                  <strong>Bitcoin Intelligence</strong>
+                  <span>Operational dashboard for technical, on-chain, macro, and derivative monitoring.</span>
+                </div>
+              </div>
+              <div class="library-card-body">
+                <div>
+                  <div class="library-eyebrow">Execution workspace</div>
+                  <h3>Bitcoin Intelligence Hub</h3>
+                  <p>Shows how the library can also store live dashboard pages, not just static books or PDF-style materials.</p>
+                </div>
+                <div class="library-tags">
+                  <span>BTC</span>
+                  <span>Macro</span>
+                  <span>Derivatives</span>
+                </div>
+                <div class="library-card-footer">
+                  <div class="library-meta">
+                    <span>6 tabs</span>
+                    <span>Live monitoring</span>
+                  </div>
+                  <a href="/bitcoin-intelligence-hub.html" class="library-link">Open hub</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="library-card" data-category="dashboard report" data-search="institutional research etf flows corporate holdings banking cbdc">
+              <div class="library-cover cover-carbon">
+                <span class="library-format">Research Desk</span>
+                <div class="library-cover-title">
+                  <strong>Institutional Center</strong>
+                  <span>Institutional-grade monitoring for flows, holdings, and policy-adjacent signals.</span>
+                </div>
+              </div>
+              <div class="library-card-body">
+                <div>
+                  <div class="library-eyebrow">Advanced workspace</div>
+                  <h3>Institutional Research Center</h3>
+                  <p>Useful for premium materials or books that should sit beside deeper dashboards aimed at serious market participants.</p>
+                </div>
+                <div class="library-tags">
+                  <span>ETF Flows</span>
+                  <span>Banking</span>
+                  <span>Institutions</span>
+                </div>
+                <div class="library-card-footer">
+                  <div class="library-meta">
+                    <span>Institutional focus</span>
+                    <span>Live context</span>
+                  </div>
+                  <a href="/institutional-research-center.html" class="library-link">Open desk</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="library-card" data-category="dashboard archive" data-search="legacy archive one page intelligence analytics tools knowledge performance indicators">
+              <div class="library-cover cover-sand">
+                <span class="library-format">Archive</span>
+                <div class="library-cover-title">
+                  <strong>Legacy Archive</strong>
+                  <span>One-page archive collecting original sections into a single long-form workspace.</span>
+                </div>
+              </div>
+              <div class="library-card-body">
+                <div>
+                  <div class="library-eyebrow">Historical shelf</div>
+                  <h3>Legacy Knowledge Archive</h3>
+                  <p>Important for preserving older materials without crowding the main library experience or losing deep links.</p>
+                </div>
+                <div class="library-tags">
+                  <span>Archive</span>
+                  <span>History</span>
+                  <span>Long-form</span>
+                </div>
+                <div class="library-card-footer">
+                  <div class="library-meta">
+                    <span>Original version</span>
+                    <span>All sections</span>
+                  </div>
+                  <a href="/legacy.html" class="library-link">Open archive</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="library-card" data-category="dashboard material" data-search="macro factors playbook fed policy dxy inflation recession economic calendar">
+              <div class="library-cover cover-indigo">
+                <span class="library-format">Playbook</span>
+                <div class="library-cover-title">
+                  <strong>Macro Factors</strong>
+                  <span>Scenario-driven reading for policy events and macro reactions.</span>
+                </div>
+              </div>
+              <div class="library-card-body">
+                <div>
+                  <div class="library-eyebrow">Scenario material</div>
+                  <h3>Macro Factors Playbook</h3>
+                  <p>A good fit for actionable briefing materials where users need clear scenarios and response frameworks.</p>
+                </div>
+                <div class="library-tags">
+                  <span>Fed</span>
+                  <span>DXY</span>
+                  <span>Scenarios</span>
+                </div>
+                <div class="library-card-footer">
+                  <div class="library-meta">
+                    <span>Decision support</span>
+                    <span>Playbook format</span>
+                  </div>
+                  <a href="/macro-factors.html" class="library-link">Open playbook</a>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="library-empty" id="libraryEmpty" hidden>
+            No materials match the current filter. Try another keyword or switch back to a broader category.
+          </div>
+
+          <div class="library-callout">
+            <div>
+              <span class="library-callout-label">Ready for incoming materials</span>
+              <h2>This layout is prepared for books, PDFs, decks, and materials sent by users.</h2>
+              <p>
+                New entries can follow the same card structure: cover, format label, short summary, tags, and one clear action.
+                That keeps the library tidy even when the number of materials grows.
+              </p>
+            </div>
+            <div class="library-callout-actions">
+              <a href="/portal/research.html" class="btn btn-accent">Review research</a>
+              <a href="/legacy.html#knowledge" class="btn-outline">Open strategy deck</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer" style="margin-top: 0; padding: 40px 0;">
+    <div class="container">
+      <div class="footer-bottom" style="border: none; margin: 0; padding: 0;">
+        <p class="footer-copy">© 2026 Ibnu Cryptosphere</p>
+        <a href="/portal/index.html" style="font-size: 0.9rem; color: var(--text-secondary); text-decoration: none;">← Back to Portal</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMobileMenu() {
+      document.getElementById("mobileMenu").classList.toggle("active");
+    }
+
+    (function initLibraryFilters() {
+      const searchInput = document.getElementById("librarySearch");
+      const countNode = document.getElementById("libraryCount");
+      const emptyNode = document.getElementById("libraryEmpty");
+      const filters = Array.from(document.querySelectorAll(".library-filter"));
+      const cards = Array.from(document.querySelectorAll(".library-card"));
+
+      let activeFilter = "all";
+
+      function updateLibrary() {
+        const query = (searchInput.value || "").trim().toLowerCase();
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+          const categories = (card.dataset.category || "").split(/\s+/).filter(Boolean);
+          const haystack = `${card.dataset.search || ""} ${card.textContent || ""}`.toLowerCase();
+          const matchesFilter = activeFilter === "all" || categories.includes(activeFilter);
+          const matchesSearch = query === "" || haystack.includes(query);
+          const isVisible = matchesFilter && matchesSearch;
+
+          card.hidden = !isVisible;
+          if (isVisible) {
+            visibleCount += 1;
+          }
+        });
+
+        countNode.textContent = `${visibleCount} item${visibleCount === 1 ? "" : "s"} available`;
+        emptyNode.hidden = visibleCount !== 0;
+      }
+
+      filters.forEach((button) => {
+        button.addEventListener("click", () => {
+          activeFilter = button.dataset.filter || "all";
+          filters.forEach((item) => item.classList.toggle("active", item === button));
+          updateLibrary();
+        });
+      });
+
+      searchInput.addEventListener("input", updateLibrary);
+      updateLibrary();
+    })();
+  </script>
+
+</body>
+</html>
